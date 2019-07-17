@@ -16,7 +16,7 @@ class _AboutPageState extends State<AboutPage>  with SingleTickerProviderStateMi
   var _db = DBHelper();
 
   AnimationController _animController;
-  Animation<double> animation1, animation2, animation3, animation4;
+  Animation<double> animation1, animation2, animation3, animation4, animation5, animation6;
 
   @override
   void initState() {
@@ -35,31 +35,45 @@ class _AboutPageState extends State<AboutPage>  with SingleTickerProviderStateMi
       vsync: this,
 	  );
 
-    animation1 = Tween(begin: -1.0, end: 0.0).animate(
+    animation1 = Tween(begin: 1.0, end: 0.0).animate(
       new CurvedAnimation(
           parent: _animController,
-          curve:  Curves.fastOutSlowIn,
+          curve:  Curves.bounceOut,
       ),
     );
 
-    animation2 = Tween(begin: -1.0, end: 0.0).animate(
+    animation2 = Tween(begin: 1.0, end: 0.0).animate(
       new CurvedAnimation(
           parent: _animController,
-          curve: Interval(0.3, 1.0, curve: Curves.fastOutSlowIn), 
+          curve: Interval(0.3, 1.0, curve: Curves.bounceOut), 
       ),
     );
 
-    animation3 = Tween(begin: -1.0, end: 0.0).animate(
+    animation3 = Tween(begin: 1.0, end: 0.0).animate(
       new CurvedAnimation(
           parent: _animController,
-          curve: Interval(0.8, 1.0, curve: Curves.fastOutSlowIn), 
+          curve: Interval(0.5, 1.0, curve: Curves.bounceOut), 
       ),
     );
 
-    animation4 = Tween(begin: -1.0, end: 0.0).animate(
+    animation4 = Tween(begin: 1.0, end: 0.0).animate(
       new CurvedAnimation(
           parent: _animController,
-          curve: Interval(0.9, 1.0, curve: Curves.fastOutSlowIn), 
+          curve: Interval(0.7, 1.0, curve: Curves.bounceOut), 
+      ),
+    );
+
+    animation5 = Tween(begin: 1.0, end: 0.0).animate(
+      new CurvedAnimation(
+          parent: _animController,
+          curve: Interval(0.8, 1.0, curve: Curves.bounceOut), 
+      ),
+    );
+
+    animation6 = Tween(begin: 1.0, end: 0.0).animate(
+      new CurvedAnimation(
+          parent: _animController,
+          curve: Interval(0.9, 1.0, curve: Curves.bounceOut), 
       ),
     );
     
@@ -124,7 +138,8 @@ class _AboutPageState extends State<AboutPage>  with SingleTickerProviderStateMi
                     color: Theme.of(context).primaryColor,
                     child: ListTile(
                       subtitle: Text(
-                        'Add fihirana dia application Android ahitana ireo hira rehetra ao amin\'ny fiangonana Assemblée de Dieu de Madagascar sy hira fiderana maro samihafa koa.',
+                        """Add fihirana dia application Android ahitana ireo hiran\'ny fiangonana Assemblée de Dieu de Madagascar sy hira fiderana maro samihafa koa.
+                        """,
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           color: Theme.of(context).primaryTextTheme.title.color,
@@ -138,7 +153,7 @@ class _AboutPageState extends State<AboutPage>  with SingleTickerProviderStateMi
               
               
               Transform(
-                transform: Matrix4.translationValues(animation2.value * width, 0.0, 0.0),
+                transform: Matrix4.translationValues(animation3.value * width, 0.0, 0.0),
                 child: Column(
                   children: <Widget>[
                     Divider(),
@@ -160,7 +175,7 @@ class _AboutPageState extends State<AboutPage>  with SingleTickerProviderStateMi
 
               ),
               Transform(
-                transform: Matrix4.translationValues(animation3.value * width, 0.0, 0.0),
+                transform: Matrix4.translationValues(animation4.value * width, 0.0, 0.0),
                 child: Column(
                   children: <Widget>[
                     ListTile(
@@ -178,7 +193,7 @@ class _AboutPageState extends State<AboutPage>  with SingleTickerProviderStateMi
               ),
               
               Transform(
-                transform: Matrix4.translationValues(animation4.value * width, 0.0, 0.0),
+                transform: Matrix4.translationValues(animation5.value * width, 0.0, 0.0),
                 child: Column(
                   children: <Widget>[
                     ListTile(
@@ -189,7 +204,42 @@ class _AboutPageState extends State<AboutPage>  with SingleTickerProviderStateMi
                       ),
                       title: Text(
                         'ADD MG $copyrightMonth'
+                        
                       ),   
+                    ),
+                    Divider()
+                  ],
+                )
+
+              ),
+
+              Transform(
+                transform: Matrix4.translationValues(animation6.value * width, 0.0, 0.0),
+                child: Column(
+                  children: <Widget>[
+                    Stack(
+                      alignment: AlignmentDirectional.centerStart,
+                      children: <Widget>[
+                        Container(
+                          margin: EdgeInsets.only(left: 20.0),
+                          color: Colors.grey[400],
+                          width: MediaQuery.of(context).size.width/100,
+                          height: MediaQuery.of(context).size.height/10,
+                        ),
+                        Container(
+                          padding: EdgeInsets.only(left: 20.0),
+                          width: MediaQuery.of(context).size.width,
+                          child: ListTile(
+                            title: Text(
+                              'Marihana fa ity fihirana ity dia azon\'ny fiangonana rehetra ampiasaina.',
+                              style: TextStyle(
+                                fontStyle: FontStyle.italic,
+                                color: Colors.grey[600]
+                              ),
+                            ),   
+                          ),
+                        )
+                      ],
                     ),
                     Divider()
                   ],

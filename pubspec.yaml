@@ -65,7 +65,7 @@ flutter:
     - assets/images/backgroundAddNightMode.jpg
     - assets/images/material1_modeSombre.jpg
     
-    - assets/addfihirana.db
+    - assets/db_addfihirana.db
 
 
   # An image asset can refer to one or more resolution-specific "variants", see

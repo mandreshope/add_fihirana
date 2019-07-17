@@ -10,6 +10,7 @@ import 'package:path_provider/path_provider.dart';
 
 class DBHelper {
   static Database _db;
+  static String dbName = "db_addfihirana.db";
 
   Future<Database> get db async {
     if (_db != null) return _db;
@@ -20,19 +21,19 @@ class DBHelper {
   initDb() async {
     // Construct a file path to copy database to
     Directory documentsDirectory = await getApplicationDocumentsDirectory();
-    String path = join(documentsDirectory.path, "addfihirana.db");
+    String path = join(documentsDirectory.path, dbName);
 
 // Only copy if the database doesn't exist
     if (FileSystemEntity.typeSync(path) == FileSystemEntityType.notFound) {
       // Load database from asset and copy
-      ByteData data = await rootBundle.load(join('assets', 'addfihirana.db'));
+      ByteData data = await rootBundle.load(join('assets', dbName));
       List<int> bytes = data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
       // Save copied asset to documents
       await new File(path).writeAsBytes(bytes);
     }
 
     Directory appDocDir = await getApplicationDocumentsDirectory();
-    String databasePath = join(appDocDir.path, 'addfihirana.db');
+    String databasePath = join(appDocDir.path, dbName);
     var theDb = await openDatabase(databasePath);
     return theDb;
   }

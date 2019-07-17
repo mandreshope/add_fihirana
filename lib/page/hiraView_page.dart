@@ -214,7 +214,14 @@ class _HiraViewPageState extends State<HiraViewPage> with SingleTickerProviderSt
                         fontSize: 20.0,
                       )
                     ),
-                    subtitle: Text('Categorie: ${hiraList[itemIndex].namelist}'),
+                    subtitle: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: <Widget>[
+                        Icon(Icons.group_work, size: 20.0, ),
+                        Text('${hiraList[itemIndex].namelist}'),
+                      ],
+                    ),
                     trailing: Stack(
                       alignment: AlignmentDirectional.center,
                       children: <Widget>[
@@ -367,6 +374,11 @@ class _HiraViewPageState extends State<HiraViewPage> with SingleTickerProviderSt
                 min: 10.0,
                 max: 40.0,
                 divisions: 40,
+                onChangeEnd: (_) {
+                  setState(() {
+                    this.val = false;
+                  });
+                },
                 onChanged: (double value) {
                   setState(() {
                     this.fontSize = value;
@@ -436,14 +448,6 @@ class _HiraViewPageState extends State<HiraViewPage> with SingleTickerProviderSt
           onTap: () {
             setState(() {
               this.val = false;
-            });
-          },
-          onTapDown: (_) {
-            setState(() {
-            });
-          },
-          onTapUp: (_) {
-            setState(() {
             });
           },
           onPanDown: (v) {

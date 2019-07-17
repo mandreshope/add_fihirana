@@ -578,11 +578,7 @@ class HomePageState extends State<HomePage> with TickerProviderStateMixin {
               SliverAppBar(
                 actions: <Widget>[
                   IconButton(
-                    icon: this._sortAlfabet == false 
-                      ? 
-                        Icon(Icons.sort_by_alpha)
-                      :
-                        Icon(Icons.format_list_numbered),
+                    icon: Icon(Icons.sort_by_alpha),
                     tooltip: this._sortAlfabet == false 
                       ? 
                         "Trier par alphabet"

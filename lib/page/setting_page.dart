@@ -52,6 +52,7 @@ class _SettingPageState extends State<SettingPage> {
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
+      backgroundColor: _modeSombre == 1 ? Colors.black : Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
         title: Text('Paramètres'),
       ),
@@ -92,21 +93,22 @@ class _SettingPageState extends State<SettingPage> {
           Divider(),
           ListTile(
             leading: Icon(Icons.text_format),
-            title: Text('Font Size'),
+            title: Text('Taille de police'),
             subtitle: Slider(
               value: this._fontSize,
+              inactiveColor: _modeSombre == 0 ? null : Theme.of(context).primaryColorLight,
               activeColor: _modeSombre == 0 ? null : Colors.white,
               min: 10.0,
               max: 40.0,
               divisions: 40,
-              label: '${_fontSize.round()}',
               onChanged: (double value) {
                 setState(() {
                   this._fontSize = value;
                   this._db.updateFontSize(this._fontSize);
                 });
               },
-            )
+            ),
+            trailing: CircleAvatar(child: Text('${_fontSize.round()}', style: TextStyle(color: _modeSombre == 1 ? Colors.white : Colors.black,),), radius: 20, backgroundColor: Colors.transparent,)
           ),
           Divider(),
           ListTile(
