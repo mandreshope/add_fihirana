@@ -27,7 +27,7 @@ class _AboutPageState extends State<AboutPage>  with SingleTickerProviderStateMi
 🔹Ka noho izany, dia manasa anao izahay mba handefa&nbsp;hafatra miafina izay&nbsp;tononkira&nbsp;hitanao fa misy&nbsp;diso&nbsp;ato amin'ity pejy facebook ity&nbsp;<strong>👉<a href="https://mobile.facebook.com/addfihirana/">ADD Fihirana</a></strong>👈. <br>Aza adino&nbsp;manondro ny&nbsp;laharan'ilay&nbsp;hira&nbsp;hitanao&nbsp;fa misy diso.<br><br>
 🔸Misaotra an' 👑 Andriamanitra 👑 izahay tamin'ny fahafahanay nanatontosa ity fitaovana ity, fitaovana fotsiny ihany izahay fa ny saina nahafahanay nanao azy dia avy Taminy irery ihany.<br><br>
 🔸Isaorana manokana ny filohan'ny fiangonana Assembl&eacute;e de Dieu de Madagascar Pasteur&nbsp;<strong>Rijamamy Be Arthur Lala&nbsp;</strong>nanome alalana nahafahanay nanatontosa ity fitaovana ity.<br><br>
-🔸Isaorana&nbsp;manoka&nbsp;ireo&nbsp;olona&nbsp;rehetra&nbsp;izay&nbsp;nanaiky ho fitaovana&nbsp;tsara nanampy sy nifanolo-tanana.<br>
+🔸Isaorana manokana ireo olona rehetra izay nanaiky ho fitaovana tsara nanampy sy nifanolo-tanana.<br>
   """;
 
   AnimationController _animController;
