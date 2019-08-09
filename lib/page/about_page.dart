@@ -1,10 +1,11 @@
 import 'package:add_fihirana/database/dbhelper.dart';
 import 'package:add_fihirana/utils/points_clipper.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_html/flutter_html.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class AboutPage extends StatefulWidget {
   static const String routeName = "/about";
-  static DateTime _copyrightDate = new DateTime.now();
 
   @override
   _AboutPageState createState() => _AboutPageState();
@@ -14,6 +15,20 @@ class _AboutPageState extends State<AboutPage>  with SingleTickerProviderStateMi
 
   int modeSombre;
   var _db = DBHelper();
+  static DateTime _copyrightDate = new DateTime.now();
+
+  Future<void> launched;
+  // String _phone = '0330297426';
+  String _lienFbMandresy = 'https://mobile.facebook.com/mandresyrandrianarinjaka';
+  // String _lienFbAddFihirana = 'https://mobile.facebook.com/addfihirana/';
+  String _textAboutAddFihirana = """
+    🔹Ny hira rehetra ato amin'ity application ity dia hira rehetra nadika avy tao amin'ilay boky fihirana an'ny Assembl&eacute;e De Dieu de Madagascar.<br><br>
+🔹Nadika tanana ny hira rehetra ka noho izany mety hisy diso na dia&nbsp;efa niezaka&nbsp;nandinika&nbsp;sy&nbsp;nijery&nbsp;aza&nbsp;izahay.<br><br>
+🔹Ka noho izany, dia manasa anao izahay mba handefa&nbsp;hafatra miafina izay&nbsp;tononkira&nbsp;hitanao fa misy&nbsp;diso&nbsp;ato amin'ity pejy facebook ity&nbsp;<strong>👉<a href="https://mobile.facebook.com/addfihirana/">ADD Fihirana</a></strong>👈. <br>Aza adino&nbsp;manondro ny&nbsp;laharan'ilay&nbsp;hira&nbsp;hitanao&nbsp;fa misy diso.<br><br>
+🔸Misaotra an' 👑 Andriamanitra 👑 izahay tamin'ny fahafahanay nanatontosa ity fitaovana ity, fitaovana fotsiny ihany izahay fa ny saina nahafahanay nanao azy dia avy Taminy irery ihany.<br><br>
+🔸Isaorana manokana ny filohan'ny fiangonana Assembl&eacute;e de Dieu de Madagascar Pasteur&nbsp;<strong>Rijamamy Be Arthur Lala&nbsp;</strong>nanome alalana nahafahanay nanatontosa ity fitaovana ity.<br><br>
+🔸Isaorana&nbsp;manoka&nbsp;ireo&nbsp;olona&nbsp;rehetra&nbsp;izay&nbsp;nanaiky ho fitaovana&nbsp;tsara nanampy sy nifanolo-tanana.<br>
+  """;
 
   AnimationController _animController;
   Animation<double> animation1, animation2, animation3, animation4, animation5, animation6;
@@ -86,9 +101,17 @@ class _AboutPageState extends State<AboutPage>  with SingleTickerProviderStateMi
 	  super.dispose();
 	}
 
+  Future<void> _launchInBrowser(String url) async {
+    if (await canLaunch(url)) {
+      await launch(url, forceSafariVC: false, forceWebView: false);
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    DateTime copyrightDate = AboutPage._copyrightDate;
+    DateTime copyrightDate = _copyrightDate;
     int copyrightMonth = copyrightDate.year;
     final double width = MediaQuery.of(context).size.width;
     _animController.forward();
@@ -100,7 +123,8 @@ class _AboutPageState extends State<AboutPage>  with SingleTickerProviderStateMi
           appBar: AppBar(
             title: Text("A propos"),
           ),
-          body: ListView(
+          body: 
+          ListView(
             children: <Widget>[
               Transform(
                 transform: Matrix4.translationValues(animation1.value * width, 0.0, 0.0),
@@ -120,15 +144,16 @@ class _AboutPageState extends State<AboutPage>  with SingleTickerProviderStateMi
                           color: Theme.of(context).primaryColorLight,
                         ),
                     ),
-                    trailing: Text('v1.0.4',
+                    trailing: Text('v1.3.6',
                       style: TextStyle(
                         color: Theme.of(context).primaryTextTheme.title.color,
                       ),
                     ),
+                    // onTap: () => this.launched = _launchInBrowser(_lienFbAddFihirana),
                   ),
                 ),
               ),
-
+              
               Transform(
                 transform: Matrix4.translationValues(animation2.value * width, 0.0, 0.0),
                 child: ClipPath(
@@ -151,72 +176,11 @@ class _AboutPageState extends State<AboutPage>  with SingleTickerProviderStateMi
 
               ),
               
-              
               Transform(
                 transform: Matrix4.translationValues(animation3.value * width, 0.0, 0.0),
                 child: Column(
                   children: <Widget>[
                     Divider(),
-                    ListTile(
-                        leading: Icon(
-                          Icons.mail, 
-                          size: 30.0,
-                          color: modeSombre == 1 ? Theme.of(context).primaryColorLight : Theme.of(context).primaryColor,
-                        ),
-                        title: Text(
-                            'Assemblée de Dieu de Madagascar'),
-                        // subtitle: Text(
-                        //     'assembleededieudemadagascar@gmail.com')
-                    ),
-                    Divider(),
-                  ],
-                )
-                
-
-              ),
-              Transform(
-                transform: Matrix4.translationValues(animation4.value * width, 0.0, 0.0),
-                child: Column(
-                  children: <Widget>[
-                    ListTile(
-                      leading: Icon(
-                        Icons.supervised_user_circle,
-                        size: 30.0,
-                        color: modeSombre == 1 ? Theme.of(context).primaryColorLight : Theme.of(context).primaryColor,
-                      ),
-                      title: Text('Développé par Tanora Modely ADD Ivandry'),
-                      subtitle: Text('Contact: mandreshope@gmail.com')
-                    ),
-                    Divider(),
-                  ],
-                )
-              ),
-              
-              Transform(
-                transform: Matrix4.translationValues(animation5.value * width, 0.0, 0.0),
-                child: Column(
-                  children: <Widget>[
-                    ListTile(
-                      leading: Icon(
-                        Icons.developer_mode,
-                        size: 30.0,
-                        color: modeSombre == 1 ? Theme.of(context).primaryColorLight : Theme.of(context).primaryColor,
-                      ),
-                      title: Text(
-                        'ADD MG $copyrightMonth'
-                        
-                      ),   
-                    ),
-                    Divider()
-                  ],
-                )
-
-              ),
-
-              Transform(
-                transform: Matrix4.translationValues(animation6.value * width, 0.0, 0.0),
-                child: Column(
-                  children: <Widget>[
                     Stack(
                       alignment: AlignmentDirectional.centerStart,
                       children: <Widget>[
@@ -246,84 +210,75 @@ class _AboutPageState extends State<AboutPage>  with SingleTickerProviderStateMi
                 )
 
               ),
-              
+
+              Transform(
+                transform: Matrix4.translationValues(animation4.value * width, 0.0, 0.0),
+                child: ExpansionTile(
+                  leading: Icon(Icons.label_important,size: 30.0,
+                        color: modeSombre == 1 ? Theme.of(context).primaryColorLight : Theme.of(context).primaryColor,),
+                  title: Text("Hafatra sy Fisaorana"),
+                  children: <Widget>[
+                    Html(
+                      data: _textAboutAddFihirana,
+                      padding: EdgeInsets.only(left:20.0, right: 20.0),
+                      linkStyle: const TextStyle(
+                        color: Colors.redAccent,
+                        decorationColor: Colors.redAccent,
+                        decoration: TextDecoration.underline,
+                      ),
+                      onLinkTap: (link) {
+                        this.launched = _launchInBrowser(link);
+                      },
+                    ),
+                  ],
+                ),
+                
+              ),
+
+              Transform(
+                transform: Matrix4.translationValues(animation5.value * width, 0.0, 0.0),
+                child: Column(
+                  children: <Widget>[
+                    Divider(),
+                    ListTile(
+                        leading: Icon(
+                          Icons.supervised_user_circle, 
+                          size: 30.0,
+                          color: modeSombre == 1 ? Theme.of(context).primaryColorLight : Theme.of(context).primaryColor,
+                        ),
+                        title: Text(
+                            'Assemblée de Dieu de Madagascar $copyrightMonth'),
+                    ),
+                    Divider(),
+                  ],
+                )
+                
+
+              ),
+
+              Transform(
+                transform: Matrix4.translationValues(animation6.value * width, 0.0, 0.0),
+                child: Column(
+                  children: <Widget>[
+                    ListTile(
+                      leading: Icon(
+                        Icons.code,
+                        size: 30.0,
+                        color: modeSombre == 1 ? Theme.of(context).primaryColorLight : Theme.of(context).primaryColor,
+                      ),
+                      title: Text('Développé par Randrianarinjaka Mandresy'),
+                      subtitle: Text('Contact: mandreshope@gmail.com'),
+                      onTap: () {
+                        this.launched = _launchInBrowser(_lienFbMandresy);
+                      },
+                    ),
+                    Divider()
+                  ],
+                )
+              ),
 
             ],
           ),
-          // body: CustomScrollView(
-          //   slivers: <Widget>[
-          //     SliverAppBar(
-          //       pinned: true,
-          //       expandedHeight: 160.0,
-          //       flexibleSpace: FlexibleSpaceBar(
-          //         title: Text("A propos"),
-          //         background: modeSombre == 1 
-          //         ? 
-          //         Image.asset('assets/images/backgroundAboutNightMode.jpg',fit: BoxFit.fill)
-          //         : 
-          //         Image.asset('assets/images/backgroundAbout.jpg',fit: BoxFit.fill),
-          //         collapseMode: CollapseMode.parallax,
-          //       ),
-          //     ),
-          //     SliverFillRemaining(
-          //       child: Container(
-          //         child: ListView(
-          //           controller: ScrollController(keepScrollOffset: false),
-          //           physics: ScrollPhysics(parent: NeverScrollableScrollPhysics()),
-          //           children: <Widget>[
-          //             ListTile(
-          //               leading: Image.asset(
-          //                 'assets/images/logoadd.png',
-          //               ),
-          //               title: Text('ADD Fihirana'),
-          //               subtitle: Text('ADD Fihirana amin\'ny Android'),
-          //               trailing: Text('v1.0.1'),
-          //             ),
-          //             ListTile(
-          //               subtitle: Text(
-          //                 'Add fihirana dia application Android ahitana ireo hira rehetra ao amin\'ny fiangonana Assemblée de Dieu de Madagascar sy hira fiderana maro samihafa koa.',
-          //                 textAlign: TextAlign.center,
-          //               ),
-          //             ),
-          //             Divider(),
-          //             ListTile(
-          //                 leading: Icon(
-          //                   Icons.mail, 
-          //                   size: 30.0,
-          //                   color: ThemeColor.themeColor(_theme),
-          //                 ),
-          //                 title: Text(
-          //                     'Assemblée de Dieu de Madagascar'),
-          //                 subtitle: Text(
-          //                     'assembleededieudemadagascar@gmail.com')),
-          //             Divider(),
-          //             ListTile(
-          //               leading: Icon(
-          //                 Icons.supervised_user_circle,
-          //                 size: 30.0,
-          //                 color: ThemeColor.themeColor(_theme),
-          //               ),
-          //               title: Text('Développé par Tanora Modely Add Ivandry'),
-          //               subtitle: Text('Contact: mandreshope@gmail.com')
-          //             ),
-          //             Divider(),
-          //             ListTile(
-          //               leading: Icon(
-          //                 Icons.copyright,
-          //                 size: 30.0,
-          //                 color: ThemeColor.themeColor(_theme)
-          //               ),
-          //               title: Text(
-          //                 'Copyright $copyrightMonth Assemblée de Dieu de Madagascar'
-          //               ),   
-          //             ),
-          //             Divider()
-          //           ],
-          //         ),
-          //       )
-          //     )
-          //   ],
-          // ),
         );
 
       },

@@ -4,22 +4,10 @@ class History{
   String title;
   int idHira;
   String date;
+  bool check = false;
+  int checked;
   
-  History(this.id, this.title, this.idHira, this.date);
-
-  History.map(dynamic obj) {
-    this.id = obj["id"];
-    this.title = obj["title"];
-    this.idHira = obj["idHira"];
-    this.date = obj["date"];
-  }
-  
-  History.fromMap(Map map) {
-    id = map[id];
-    title = map[title];
-    idHira = map[idHira];
-    date = map[date];
-  }
+  History(this.id, this.title, this.idHira, this.date, this.checked);
 
   Map<String, dynamic> toMap() {
     var map = Map<String, dynamic>();
@@ -27,6 +15,7 @@ class History{
     map["title"] = title;
     map["id_table_hira"] = idHira;
     map["date"] = date;
+    map["checked"] = checked;
 
     if (id != null) {
       map["_id"] = id;

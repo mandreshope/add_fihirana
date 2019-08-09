@@ -1,6 +1,5 @@
-import 'dart:math' as math;
-
 import 'package:add_fihirana/database/dbhelper.dart';
+import 'package:add_fihirana/model/favoris.dart';
 import 'package:add_fihirana/model/hira.dart';
 import 'package:add_fihirana/page/about_page.dart';
 import 'package:add_fihirana/page/favoris_page.dart';
@@ -8,14 +7,13 @@ import 'package:add_fihirana/page/hiraView_page.dart';
 import 'package:add_fihirana/page/history_page.dart';
 import 'package:add_fihirana/page/setting_page.dart';
 import 'package:add_fihirana/utils/diagonal_path_clipper_1.dart';
+import 'package:add_fihirana/utils/share.dart';
 import 'package:add_fihirana/utils/shimmer.dart';
+import 'package:add_fihirana/utils/wave_clipper_1.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:material_search/material_search.dart';
-import 'package:url_launcher/url_launcher.dart';
-
-import 'package:animated_background/animated_background.dart';
 
 class HomePage extends StatefulWidget {
   static const String routeName = "/home";
@@ -28,51 +26,26 @@ class HomePage extends StatefulWidget {
 }
 
 class HomePageState extends State<HomePage> with TickerProviderStateMixin {
-  static const numBehaviours = 5;
-
-  ParticleOptions particleOptions = ParticleOptions(
-    baseColor: Colors.white,
-    spawnOpacity: 0.0,
-    opacityChangeRate: 0.25,
-    minOpacity: 0.1,
-    maxOpacity: 0.7,
-    spawnMinSpeed: 20.0,
-    spawnMaxSpeed: 40.0,
-    spawnMinRadius: 3.0,
-    spawnMaxRadius: 10.0,
-    particleCount: 10,
-  );
-
-  var particlePaint = Paint()
-    ..style = PaintingStyle.fill
-    ..strokeWidth = 0.5;
-
-  // Lines
-
-  var _lineDirection = LineDirection.Ltr;
-  int _lineCount = 50;
-
-  // Bubbles
-  BubbleOptions _bubbleOptions = BubbleOptions(
-      bubbleCount: 5,
-      minTargetRadius: 10,
-      maxTargetRadius: 29,
-      popRate: 50,
-      growthRate: 5.0);
-
-  // General Variables
-  int _behaviourIndex = 1;
-  Behaviour behaviour;
-
-  bool _showSettings = false;
 
   static List<Hira> hiraList = [];
-  List<String> kHiraList = [];
   String skHiraList = 'No one';
-  static List<Hira> hiraTaloha = [];
-  static List<Hira> hira2016 = [];
-  static List<Hira> hira2017 = [];
-  static List<Hira> hira2018 = [];
+  static List<Hira> hiraSokajyhafa = [];
+  static List<Hira> hiraFiankohofana = [];
+  static List<Hira> hiraPaska  = [];
+  static List<Hira> hiraFideranasyfankalazana = [];
+  static List<Hira> hiraFanahyMasina = [];
+  static List<Hira> hiraTeninAndriamanitra  = [];
+  static List<Hira> hiraFitorianafilazantsara = [];
+  static List<Hira> hiraFanatitra  = [];
+  static List<Hira> hiraFanasannyTompo = [];
+  static List<Hira> hiraKrismasy = [];
+  static List<Hira> hiraFanosoranampiasa = [];
+  static List<Hira> hiraMariazy = [];
+  static List<Hira> hiraFanolorantena = [];
+  static List<Hira> hiraFahafatesana = [];
+  static List<Hira> hiraFiravana = [];
+  static List<Hira> hiraFanoloranjaza = [];
+  static const int lengthOfTab = 16;
 
   bool _sortAlfabet = false;
 
@@ -81,10 +54,12 @@ class HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
   Future<void> launched;
   // String _phone = '0330297426';
-  String _addFihiranaUrl =
-      'https://web.facebook.com/Add-fihirana-2215721572022794/';
+  String _linkToShareAddFihirana = 'http://web.facebook.com/addfihirana/';
+  // https://web.facebook.com/pg/addfihirana/about/
 
-  HomePageState();
+  AnimationController _animController;
+  Animation<double> animation1, animation2, animation3;
+  _AnimationStatus animationStatus = _AnimationStatus.end;
 
   void reloadHiraList() {
     hiraList.clear();
@@ -105,13 +80,13 @@ class HomePageState extends State<HomePage> with TickerProviderStateMixin {
     });
   }
 
-  Future<void> _launchInBrowser(String url) async {
-    if (await canLaunch(url)) {
-      await launch(url, forceSafariVC: false, forceWebView: false);
-    } else {
-      throw 'Could not launch $url';
-    }
-  }
+  // Future<void> _launchInBrowser(String url) async {
+  //   if (await canLaunch(url)) {
+  //     await launch(url, forceSafariVC: false, forceWebView: false);
+  //   } else {
+  //     throw 'Could not launch $url';
+  //   }
+  // }
 
   @override
   void initState() {
@@ -128,39 +103,125 @@ class HomePageState extends State<HomePage> with TickerProviderStateMixin {
     db.getSongs().then((onValue) {
       hiraList.addAll(onValue);
       setState(() {});
+      _animController.forward();
     });
 
-    db.getCategorySongs('Taloha').then((onValue) {
-      hiraTaloha.addAll(onValue);
+    db.getCategorySongs('Sokajy hafa').then((onValue) {
+      hiraSokajyhafa.addAll(onValue);
+      setState(() {
+
+      });
+    });
+
+    db.getCategorySongs('Fiankohofana').then((onValue) {
+      hiraFiankohofana.addAll(onValue);
       setState(() {});
     });
 
-    db.getCategorySongs('2016').then((onValue) {
-      hira2016.addAll(onValue);
+    db.getCategorySongs('Paska').then((onValue) {
+      hiraPaska.addAll(onValue);
       setState(() {});
     });
 
-    db.getCategorySongs('2017').then((onValue) {
-      hira2017.addAll(onValue);
+    db.getCategorySongs('Fiderana sy fankalazana').then((onValue) {
+      hiraFideranasyfankalazana.addAll(onValue);
       setState(() {});
     });
 
-    db.getCategorySongs('2018').then((onValue) {
-      hira2018.addAll(onValue);
+    db.getCategorySongs('Fanahy Masina').then((onValue) {
+      hiraFanahyMasina.addAll(onValue);
       setState(() {});
     });
 
-    db.getTitleSongs().then((onValue) {
-      kHiraList.addAll(onValue);
+    db.getCategorySongs("Tenin'Andriamanitra").then((onValue) {
+      hiraTeninAndriamanitra.addAll(onValue);
       setState(() {});
     });
+
+
+    db.getCategorySongs('Fitoriana filazantsara').then((onValue) {
+      hiraFitorianafilazantsara.addAll(onValue);
+      setState(() {});
+    });
+
+    db.getCategorySongs('Fanatitra').then((onValue) {
+      hiraFanatitra.addAll(onValue);
+      setState(() {});
+    });
+
+    db.getCategorySongs("Fanasan'ny Tompo").then((onValue) {
+      hiraFanasannyTompo.addAll(onValue);
+      setState(() {});
+    });
+
+    db.getCategorySongs('Krismasy').then((onValue) {
+      hiraKrismasy.addAll(onValue);
+      setState(() {});
+    });
+
+    db.getCategorySongs('Fanosorana mpiasa').then((onValue) {
+      hiraFanosoranampiasa  .addAll(onValue);
+      setState(() {});
+    });
+
+    db.getCategorySongs('Mariazy').then((onValue) {
+      hiraMariazy  .addAll(onValue);
+      setState(() {});
+    });
+
+    db.getCategorySongs('Fanoloran-tena').then((onValue) {
+      hiraFanolorantena  .addAll(onValue);
+      setState(() {});
+    });
+
+    db.getCategorySongs('Fahafatesana').then((onValue) {
+      hiraFahafatesana  .addAll(onValue);
+      setState(() {});
+    });
+
+    db.getCategorySongs('Firavana').then((onValue) {
+      hiraFiravana  .addAll(onValue);
+      setState(() {});
+    });
+
+    db.getCategorySongs('Fanoloran-jaza').then((onValue) {
+      hiraFanoloranjaza.addAll(onValue);
+      setState(() {});
+    });
+
+    _animController = new AnimationController(
+      duration: const Duration(seconds: 3), 
+      vsync: this,
+	  );
+
+    animation1 = Tween(begin: 1.0, end: 0.0).animate(
+      new CurvedAnimation(
+          parent: _animController,
+          curve:  Curves.fastOutSlowIn,
+      ),
+    );
+
+    animation2 = Tween(begin: -1.0, end: 0.0).animate(
+      new CurvedAnimation(
+          parent: _animController,
+          curve: Interval(0.7, 1.0, curve: Curves.fastOutSlowIn), 
+      ),
+    );
+
+    animation3 = Tween(begin: 1.0, end: 0.0).animate(
+      new CurvedAnimation(
+          parent: _animController,
+          curve: Interval(0.8, 1.0, curve: Curves.fastOutSlowIn), 
+      ),
+    );
+
   }
 
-  // @override
-  // void dispose() {
-  //   super.dispose();
-  //   reloadHiraList();
-  // }
+  @override
+	void dispose(){
+	  _animController.dispose();
+	  super.dispose();
+	}
 
   ListView hiraListWidget(List<Hira> hiraList2) {
     return ListView.builder(
@@ -173,15 +234,15 @@ class HomePageState extends State<HomePage> with TickerProviderStateMixin {
             },
             dense: true,
             leading: CircleAvatar(
-                child: Text(hiraList2[index].title.substring(0, 1))),
+                child: Text(hiraList2[index].title.substring(0, 1),)
+            ),
             title: Text(
               hiraList2[index].title,
               style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
             ),
             subtitle: Text(
-                'N° ' +
                     hiraList2[index].id.toString() +
-                    ' / Categorie : ' +
+                    ' • ' +
                     hiraList2[index].namelist,
                 style: TextStyle(
                     fontSize: 15,
@@ -201,9 +262,8 @@ class HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
                     hiraList2[index].favoris = null;
 
-                    db.setFavoris(hiraList2[index].id, null, null).then((onValue) {
-                      
-                    });
+                    db.deleteFavoris2(hiraList2[index].id).then((onValue){});
+                    db.setFavorisToTableHira(hiraList2[index].id, null);
                     
                   } else {
                     hiraList[hiraList2[index].id-1].favoris = 1;
@@ -218,7 +278,8 @@ class HomePageState extends State<HomePage> with TickerProviderStateMixin {
                     // var s = DateTime.now().second;
                     var dateNow = '${d < 10 ? '0$d': d}-${m < 10 ? '0$m': m}-$y $h:$mn';
                     // mandeha
-                    db.setFavoris(hiraList2[index].id, 1, dateNow);
+                    db.setFavoris2(Favoris(null, hiraList2[index].title, hiraList2[index].id, dateNow, 0));
+                    db.setFavorisToTableHira(hiraList2[index].id, 1);
                   }
                 });
               },
@@ -244,11 +305,11 @@ class HomePageState extends State<HomePage> with TickerProviderStateMixin {
                   : Colors.white,
               iconColor: modeSombre == 1 ? Colors.white : Colors.black,
               placeholder: 'Tapez le titre...',
-              results: kHiraList
-                  .map((String v) => new MaterialSearchResult<String>(
+              results: hiraList
+                  .map((Hira v) => new MaterialSearchResult<String>(
                         icon: Icons.queue_music,
-                        value: v,
-                        text: "$v",
+                        value: v.title,
+                        text: "${v.title}",
                       ))
                   .toList(),
               filter: (dynamic value, String criteria) {
@@ -258,14 +319,6 @@ class HomePageState extends State<HomePage> with TickerProviderStateMixin {
               onSelect: (dynamic value) {
                 _searchgoToHiraViewPage(context, value);
               },
-              // onSubmit: (String value) => Navigator.of(context).push(
-              //   MaterialPageRoute(
-              //     builder: (BuildContext context) =>
-              //       HiraViewPage(
-              //         title: value
-              //       )
-              //   )
-              // )
             ),
           );
         });
@@ -331,20 +384,28 @@ class HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
+    final double width = MediaQuery.of(context).size.width;
+    // final double height = MediaQuery.of(context).size.height;
     final drawerHeader = Center(
       child: Stack(
-        alignment: AlignmentDirectional.bottomCenter,
         children: <Widget>[
           ClipPath(
             clipper: DiagonalPathClipperOne(),
             child: Container(
-              height: 200.0,
+              height: 220.0,
               color: Theme.of(context).primaryColor,
               child: Center(
                 child: modeSombre == 1
                     ? Container(
                       width: MediaQuery.of(context).size.width,
                       height: 150,
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                          fit: BoxFit.cover,
+                          image: AssetImage('assets/images/music_clip.png'),
+                          alignment: Alignment.topLeft,
+                        ),
+                      ),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: <Widget>[
@@ -355,7 +416,7 @@ class HomePageState extends State<HomePage> with TickerProviderStateMixin {
                             height: 50.0,
                           ),
                           Divider(
-                            color: Theme.of(context).primaryColor,
+                            color: Colors.transparent,
                             height: 5,
                           ),
                           Text('ADD FIHIRANA', style: TextStyle(
@@ -364,7 +425,7 @@ class HomePageState extends State<HomePage> with TickerProviderStateMixin {
                               fontWeight: FontWeight.bold
                             ),),
                           Divider(
-                            color: Theme.of(context).primaryColor,
+                            color: Colors.transparent,
                           ),
                           Text('FIHIRANA ASSEMBLEE DE DIEU DE MADAGASCAR', style: TextStyle(
                               color: Theme.of(context).primaryTextTheme.title.color,
@@ -376,9 +437,17 @@ class HomePageState extends State<HomePage> with TickerProviderStateMixin {
                       ),
                     )
                     : Container(
-                      width: MediaQuery.of(context).size.width,
+                      width: width,
                       height: 150,
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                          fit: BoxFit.cover,
+                          image: AssetImage('assets/images/music_clip.png'),
+                          alignment: Alignment.topLeft,
+                        ),
+                      ),
                       child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: <Widget>[
                           Image.asset(
@@ -388,7 +457,7 @@ class HomePageState extends State<HomePage> with TickerProviderStateMixin {
                             height: 50.0,
                           ),
                           Divider(
-                            color: Theme.of(context).primaryColor,
+                            color: Colors.transparent,
                             height: 5,
                           ),
                           
@@ -398,7 +467,7 @@ class HomePageState extends State<HomePage> with TickerProviderStateMixin {
                               fontWeight: FontWeight.bold
                             ),),
                           Divider(
-                            color: Theme.of(context).primaryColor,
+                            color: Colors.transparent,
                           ),
                           Text('FIHIRANA ASSEMBLEE DE DIEU DE MADAGASCAR', style: TextStyle(
                               color: Theme.of(context).primaryTextTheme.title.color,
@@ -417,7 +486,8 @@ class HomePageState extends State<HomePage> with TickerProviderStateMixin {
       )
     );
 
-    final drawerItems = ListView(
+    final drawerItems = SingleChildScrollView(
+      child: Column(
       children: <Widget>[
         drawerHeader,
         ListTile(
@@ -470,11 +540,16 @@ class HomePageState extends State<HomePage> with TickerProviderStateMixin {
           ),
           title: Text('Partager l\'application'),
           onTap: () {
-            Navigator.pop(context); // close the drawer
-            setState(() {
-              this.launched = _launchInBrowser(_addFihiranaUrl);
-              // this._launched = _makePhoneCall('tel:$_phone');
-            });
+            // Navigator.pop(context); // close the drawer
+            // setState(() {
+            //   this.launched = _launchInBrowser(_addFihiranaUrl);
+            //   // this._launched = _makePhoneCall('tel:$_phone');
+            // });
+            final RenderBox box = context.findRenderObject();
+                              Share.plainText(text: 'Tiako be ity application ity 😍😃: $_linkToShareAddFihirana').share(
+                                  sharePositionOrigin:
+                                      box.localToGlobal(Offset.zero) &
+                                          box.size);
           },
         ),
         ListTile(
@@ -492,11 +567,12 @@ class HomePageState extends State<HomePage> with TickerProviderStateMixin {
           },
         )
       ],
+    ),
     );
 
     var noData = ListView(
       padding:
-          EdgeInsets.only(top: 30.0, left: 16.0, right: 16.0, bottom: 16.0),
+          EdgeInsets.only(top: 35.0, left: 16.0, right: 16.0, bottom: 16.0),
       children: <Widget>[
         Shimmer.fromColors(
           baseColor: Colors.grey[300],
@@ -554,239 +630,250 @@ class HomePageState extends State<HomePage> with TickerProviderStateMixin {
       ],
     );
 
-    var hiraListTaloha = hiraListWidget(hiraTaloha);
-    var hiraList2016 = hiraListWidget(hira2016);
-    var hiraList2017 = hiraListWidget(hira2017);
-    var hiraList2018 = hiraListWidget(hira2018);
+    var hiraListSokajyhafa = hiraListWidget(hiraSokajyhafa );
+    var hiraListFiankohofana = hiraListWidget(hiraFiankohofana );
+    var hiraListPaska = hiraListWidget(hiraPaska  );
+    var hiraListFideranasyfankalazana = hiraListWidget(hiraFideranasyfankalazana );
+    var hiraListFanahyMasina = hiraListWidget(hiraFanahyMasina );
+    var hiraListTeninAndriamanitra = hiraListWidget(hiraTeninAndriamanitra  );
+    var hiraListFitorianafilazantsara = hiraListWidget(hiraFitorianafilazantsara );
+    var hiraListFanatitra = hiraListWidget(hiraFanatitra  );
+    var hiraListFanasannyTompo = hiraListWidget(hiraFanasannyTompo );
+
+    var hiraListKrismasy  = hiraListWidget(hiraKrismasy );
+    var hiraListFanosoranampiasa  = hiraListWidget(hiraFanosoranampiasa );
+    var hiraListMariazy  = hiraListWidget(hiraMariazy );
+    var hiraListFanolorantena  = hiraListWidget(hiraFanolorantena );
+    var hiraListFahafatesana  = hiraListWidget(hiraFahafatesana );
+    var hiraListFiravana  = hiraListWidget(hiraFiravana );
+
+    var hiraListFanoloranjaza = hiraListWidget(hiraFanoloranjaza );
+    
 
     final _kTabPages = <Widget>[
-      hiraList.isEmpty ? noData : hiraListTaloha,
-      hiraList.isEmpty ? noData : hiraList2016,
-      hiraList.isEmpty ? noData : hiraList2017,
-      hiraList.isEmpty ? noData : hiraList2018,
-    ];
+      hiraList.isEmpty ? noData : hiraListSokajyhafa,
+      hiraList.isEmpty ? noData : hiraListFiankohofana,
+      hiraList.isEmpty ? noData : hiraListPaska,
+      hiraList.isEmpty ? noData : hiraListFideranasyfankalazana,
+      hiraList.isEmpty ? noData : hiraListFanahyMasina,
+      hiraList.isEmpty ? noData : hiraListTeninAndriamanitra,
+      hiraList.isEmpty ? noData : hiraListFitorianafilazantsara,
+      hiraList.isEmpty ? noData : hiraListFanatitra,
+      hiraList.isEmpty ? noData : hiraListFanasannyTompo,
 
-    return Scaffold(
-      backgroundColor: modeSombre == 1
-          ? Colors.black
-          : Theme.of(context).scaffoldBackgroundColor,
-      body: DefaultTabController(
-        length: 4,
-        child: NestedScrollView(
-          headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
-            return <Widget>[
-              SliverAppBar(
-                actions: <Widget>[
-                  IconButton(
-                    icon: Icon(Icons.sort_by_alpha),
-                    tooltip: this._sortAlfabet == false 
-                      ? 
-                        "Trier par alphabet"
-                      :
-                        "Trier par numero",
-                    onPressed: () {
-                      if(this._sortAlfabet == false) {
-                        setState(() {
-                          this._sortAlfabet = true;
-                          hiraTaloha..sort((a, b) => a.title.compareTo(b.title));
-                          hira2016.sort((a, b) => a.title.compareTo(b.title));
-                          hira2017.sort((a, b) => a.title.compareTo(b.title));
-                          hira2018.sort((a, b) => a.title.compareTo(b.title));
-                        });
-                      }else {
-                        setState(() {
-                          this._sortAlfabet = false;
-                          hiraTaloha..sort((a, b) => a.id.compareTo(b.id));
-                          hira2016..sort((a, b) => a.id.compareTo(b.id));
-                          hira2017..sort((a, b) => a.id.compareTo(b.id));
-                          hira2018..sort((a, b) => a.id.compareTo(b.id));
-                        });
-                      }
-                    },
+      hiraList.isEmpty ? noData : hiraListKrismasy,
+      hiraList.isEmpty ? noData : hiraListFanosoranampiasa,
+      hiraList.isEmpty ? noData : hiraListMariazy,
+      hiraList.isEmpty ? noData : hiraListFanolorantena,
+      hiraList.isEmpty ? noData : hiraListFahafatesana,
+      hiraList.isEmpty ? noData : hiraListFiravana,
+
+      hiraList.isEmpty ? noData : hiraListFanoloranjaza,
+    ];  
+
+    return AnimatedBuilder(
+      animation: _animController, 
+      builder: (BuildContext context, Widget child) {
+        return Scaffold(
+          backgroundColor: modeSombre == 1
+              ? Colors.black
+              : Theme.of(context).scaffoldBackgroundColor,
+          body: DefaultTabController(
+            length: lengthOfTab,
+            child: NestedScrollView(
+              headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
+                return <Widget>[
+                  SliverAppBar(
+                    pinned: true,
+                    backgroundColor: Theme.of(context).primaryColor,
+                    actions: <Widget>[
+                      IconButton(
+                        icon: Icon(Icons.sort_by_alpha),
+                        tooltip: this._sortAlfabet == false 
+                          ? 
+                            "Trier par alphabet"
+                          :
+                            "Trier par numero",
+                        onPressed: () {
+                          if(this._sortAlfabet == false) {
+                            setState(() {
+                              this._sortAlfabet = true;
+                              hiraSokajyhafa ..sort((a, b) => a.title.compareTo(b.title));
+                              hiraFiankohofana .sort((a, b) => a.title.compareTo(b.title));
+                              hiraPaska  .sort((a, b) => a.title.compareTo(b.title));
+                              hiraFideranasyfankalazana .sort((a, b) => a.title.compareTo(b.title));
+                              hiraFanahyMasina .sort((a, b) => a.title.compareTo(b.title));
+                              hiraTeninAndriamanitra  .sort((a, b) => a.title.compareTo(b.title));
+                              hiraFitorianafilazantsara .sort((a, b) => a.title.compareTo(b.title));
+                              hiraFanatitra  .sort((a, b) => a.title.compareTo(b.title));
+                              hiraFanasannyTompo .sort((a, b) => a.title.compareTo(b.title));
+
+                              hiraKrismasy  .sort((a, b) => a.title.compareTo(b.title));
+                              hiraFanosoranampiasa  .sort((a, b) => a.title.compareTo(b.title));
+                              hiraMariazy  .sort((a, b) => a.title.compareTo(b.title));
+                              hiraFanolorantena .sort((a, b) => a.title.compareTo(b.title));
+                              hiraFahafatesana   .sort((a, b) => a.title.compareTo(b.title));
+                              hiraFiravana  .sort((a, b) => a.title.compareTo(b.title));
+
+                              hiraFanoloranjaza .sort((a, b) => a.title.compareTo(b.title));
+                            });
+                          }else {
+                            setState(() {
+                              this._sortAlfabet = false;
+                              hiraSokajyhafa..sort((a, b) => a.id.compareTo(b.id));
+                              hiraFiankohofana..sort((a, b) => a.id.compareTo(b.id));
+                              hiraPaska.sort((a, b) => a.id.compareTo(b.id));
+                              hiraFideranasyfankalazana..sort((a, b) => a.id.compareTo(b.id));
+                              hiraFanahyMasina..sort((a, b) => a.id.compareTo(b.id));
+                              hiraTeninAndriamanitra.sort((a, b) => a.id.compareTo(b.id));
+                              hiraFitorianafilazantsara.sort((a, b) => a.id.compareTo(b.id));
+                              hiraFanatitra.sort((a, b) => a.id.compareTo(b.id));
+                              hiraFanasannyTompo.sort((a, b) => a.id.compareTo(b.id));
+
+                              hiraKrismasy  .sort((a, b) => a.id.compareTo(b.id));
+                              hiraFanosoranampiasa  .sort((a, b) => a.id.compareTo(b.id));
+                              hiraMariazy  .sort((a, b) => a.id.compareTo(b.id));
+                              hiraFanolorantena .sort((a, b) => a.id.compareTo(b.id));
+                              hiraFahafatesana   .sort((a, b) => a.id.compareTo(b.id));
+                              hiraFiravana  .sort((a, b) => a.id.compareTo(b.id));
+
+                              hiraFanoloranjaza.sort((a, b) => a.id.compareTo(b.id));
+                              
+                            });
+                          }
+                        },
+                      ),
+                      IconButton(
+                        tooltip: 'Rechercher',
+                        icon: const Icon(Icons.search),
+                        onPressed: () async {
+                          _showMaterialSearch(context);
+                          reloadSettings();
+                        },
+                      ),
+                    ],
+                    expandedHeight: 160.0,
+                    flexibleSpace: FlexibleSpaceBar(
+                        collapseMode: CollapseMode.pin,
+                        title: Text("ADD Fihirana"),
+                        background: ClipPath(
+                          clipper: WaveClipperOne(),
+                          child: Stack(
+                            alignment: AlignmentDirectional.center,
+                            children: <Widget>[
+                              Container(
+                                width: MediaQuery.of(context).size.width,
+                                height: MediaQuery.of(context).size.height,
+                                color: modeSombre == 1
+                                ? 
+                                  Colors.black
+                                
+                                : 
+                                  Theme.of(context).primaryColorDark
+                                
+                              ),
+                              Container(
+                                width: width*0.9,
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: <Widget>[
+                                    Transform(
+                                      transform: Matrix4.translationValues(animation1.value*width, 0.0, 0.0),
+                                      child: Align(
+                                        alignment: Alignment.center,
+                                        child: Image.asset('assets/images/logoaddfihirana.png', width: width*0.3/2,),
+                                      ),
+                                    ),
+                                    Transform(
+                                      transform: Matrix4.translationValues(animation2.value * width, 0.0, 0.0),
+                                      child: Align(
+                                        heightFactor: 2,
+                                        alignment: Alignment.centerLeft,
+                                        child: Text('« Hihira ho an’i Jehovah aho raha mbola velona koa »', 
+                                          style: TextStyle(
+                                            fontStyle: FontStyle.italic,
+                                            backgroundColor: Colors.black12,
+                                            fontWeight: FontWeight.bold,
+                                            color: Theme.of(context).primaryTextTheme.title.color
+                                          )
+                                        ),
+                                      )
+                                    ),
+                                    Transform(
+                                      transform: Matrix4.translationValues(0, animation3.value * width, 0.0),
+                                      child: Align(
+                                        heightFactor: 1,
+                                        alignment: Alignment.centerRight,
+                                        child: Text('Sal. 104:33a', 
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontStyle: FontStyle.italic,
+                                            color: Theme.of(context).primaryTextTheme.title.color
+                                          ),
+                                        )
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ],
+                          )
+                        )
+                        
+                      ),
                   ),
-                  IconButton(
-                    tooltip: 'Rechercher',
-                    icon: const Icon(Icons.search),
-                    onPressed: () async {
-                      _showMaterialSearch(context);
-                      reloadSettings();
-                    },
-                  ),
-                ],
-                pinned: true,
-                expandedHeight: 160.0,
-                flexibleSpace: FlexibleSpaceBar(
-                    title: Text("ADD Fihirana"),
-                    background: Stack(
-                      alignment: AlignmentDirectional.bottomCenter,
-                      children: <Widget>[
-                        Container(
-                          height: MediaQuery.of(context).size.height,
-                          width: MediaQuery.of(context).size.width,
-                          child: modeSombre == 1
-                              ? Image.asset(
-                                  'assets/images/backgroundAddNightMode.jpg',
-                                  fit: BoxFit.fill)
-                              : Image.asset('assets/images/backgroundAd.jpg',
-                                  fit: BoxFit.fill),
+                  SliverPersistentHeader(
+                    delegate: _SliverAppBarDelegate(
+                      TabBar(
+                        isScrollable: true,
+                        labelStyle: TextStyle(fontSize: 20.0),
+                        unselectedLabelStyle: TextStyle(
+                          fontSize: 20.0,
+                          color: Colors.white70,
                         ),
-                        AnimatedBackground(
-                          behaviour: behaviour = _buildBehaviour(),
-                          vsync: this,
-                          child: SingleChildScrollView(
-                            child: Padding(
-                              padding: const EdgeInsets.all(16.0),
-                            ),
-                          ),
-                        ),
-                      ],
-                    )
-                    // background: Image.asset(
-                    //   'assets/images/material2.jpg',
-                    //   fit: BoxFit.fill,
-                    // ),
+                        indicatorColor: Colors.white,
+                        indicatorPadding: EdgeInsets.all(8.0),
+                        labelColor: Colors.white,
+                        indicatorSize: TabBarIndicatorSize.label,
+                        tabs: [
+                          Tab(text: "Sokajy hafa"),
+                          Tab(text: "Fiankohofana"),
+                          Tab(text: "Paska"),
+                          Tab(text: "Fiderana sy fankalazana"),
+                          Tab(text: "Fanahy Masina"),
+                          Tab(text: "Tenin'Andriamanitra"),
+                          Tab(text: "Fitoriana filazantsara"),
+                          Tab(text: "Fanatitra"),
+                          Tab(text: "Fanasan'ny Tompo"),
+                          Tab(text: "Krismasy"),
+                          Tab(text: "Fanosorana mpiasa"),
+                          Tab(text: "Mariazy"),
+                          Tab(text: "Fanoloran-tena"),
+                          Tab(text: "Fahafatesana"),
+                          Tab(text: "Firavana"),
+                          Tab(text: "Fanoloran-jaza"),
+                        ],
+                      )
                     ),
-              ),
-              SliverPersistentHeader(
-                delegate: _SliverAppBarDelegate(TabBar(
-                  labelStyle: TextStyle(fontSize: 20.0),
-                  unselectedLabelStyle: TextStyle(
-                    fontSize: 20.0,
-                    color: Colors.white70,
+                    pinned: true,
                   ),
-                  indicatorColor: Colors.white,
-                  indicatorPadding: EdgeInsets.all(8.0),
-                  labelColor: Colors.white,
-                  indicatorSize: TabBarIndicatorSize.label,
-                  tabs: [
-                    Tab(text: "Taloha"),
-                    Tab(text: "2016"),
-                    Tab(text: "2017"),
-                    Tab(text: "2018"),
-                  ],
-                )),
-                pinned: true,
+                ];
+              },
+              body: TabBarView(
+                children: _kTabPages,
               ),
-            ];
-          },
-          body: TabBarView(
-            children: _kTabPages,
+            ),
           ),
-        ),
-      ),
-      drawer: Drawer(
-        child: drawerItems,
-      ),
+          drawer: Drawer(
+            child: drawerItems,
+          ),
+        );
+      },
+
     );
+    
   }
 
-  Behaviour _buildBehaviour() {
-    switch (_behaviourIndex) {
-      case 0:
-        return RandomParticleBehaviour(
-          options: particleOptions,
-          paint: particlePaint,
-        );
-      case 1:
-        return RainParticleBehaviour(
-          options: particleOptions,
-          paint: particlePaint,
-          enabled: !_showSettings,
-        );
-      case 2:
-        return RectanglesBehaviour();
-      case 3:
-        return RacingLinesBehaviour(
-          direction: _lineDirection,
-          numLines: _lineCount,
-        );
-      case 4:
-        return BubblesBehaviour(
-          options: _bubbleOptions,
-        );
-      case 5:
-        return SpaceBehaviour();
-    }
-
-    return RandomParticleBehaviour(
-      options: particleOptions,
-      paint: particlePaint,
-    );
-  }
-}
-
-enum ParticleType {
-  Shape,
-  Image,
-}
-
-class RainParticleBehaviour extends RandomParticleBehaviour {
-  static math.Random random = math.Random();
-
-  bool enabled;
-
-  RainParticleBehaviour({
-    ParticleOptions options = const ParticleOptions(),
-    Paint paint,
-    this.enabled = true,
-  })  : assert(options != null),
-        super(options: options, paint: paint);
-
-  @override
-  void initPosition(Particle p) {
-    p.cx = random.nextDouble() * size.width;
-    if (p.cy == 0.0)
-      p.cy = random.nextDouble() * size.height;
-    else
-      p.cy = random.nextDouble() * size.width * 0.2;
-  }
-
-  @override
-  void initDirection(Particle p, double speed) {
-    double dirX = (random.nextDouble() - 0.5);
-    double dirY = random.nextDouble() * 0.5 + 0.5;
-    double magSq = dirX * dirX + dirY * dirY;
-    double mag = magSq <= 0 ? 1 : math.sqrt(magSq);
-
-    p.dx = dirX / mag * speed;
-    p.dy = dirY / mag * speed;
-  }
-
-  @override
-  Widget builder(
-      BuildContext context, BoxConstraints constraints, Widget child) {
-    return GestureDetector(
-      onPanUpdate: enabled
-          ? (details) => _updateParticles(context, details.globalPosition)
-          : null,
-      onTapDown: enabled
-          ? (details) => _updateParticles(context, details.globalPosition)
-          : null,
-      child: ConstrainedBox(
-        // necessary to force gesture detector to cover screen
-        constraints: BoxConstraints(
-            minHeight: double.infinity, minWidth: double.infinity),
-        child: super.builder(context, constraints, child),
-      ),
-    );
-  }
-
-  void _updateParticles(BuildContext context, Offset offsetGlobal) {
-    RenderBox renderBox = context.findRenderObject() as RenderBox;
-    var offset = renderBox.globalToLocal(offsetGlobal);
-    particles.forEach((particle) {
-      var delta = (Offset(particle.cx, particle.cy) - offset);
-      if (delta.distanceSquared < 70 * 70) {
-        var speed = particle.speed;
-        var mag = delta.distance;
-        speed *= (70 - mag) / 70.0 * 2.0 + 0.5;
-        speed = math.max(
-            options.spawnMinSpeed, math.min(options.spawnMaxSpeed, speed));
-        particle.dx = delta.dx / mag * speed;
-        particle.dy = delta.dy / mag * speed;
-      }
-    });
-  }
 }
 
 class _SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
@@ -803,7 +890,7 @@ class _SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
   Widget build(
       BuildContext context, double shrinkOffset, bool overlapsContent) {
     return new Container(
-        color: Colors.black87,
+        color: Theme.of(context).primaryColor,
         child: Stack(
           children: <Widget>[_tabBar],
         ));
@@ -814,3 +901,5 @@ class _SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
     return false;
   }
 }
+
+enum _AnimationStatus { start, end, animating }

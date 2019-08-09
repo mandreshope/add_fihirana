@@ -11,7 +11,7 @@ description: Add fihirana dia application Android ahitana ireo hira rehetra ao a
 # In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-version: 1.0.4
+version: 1.3.6
 
 environment:
   sdk: ">=2.1.0 <3.0.0"
@@ -26,13 +26,11 @@ dependencies:
   rxdart: ^0.21.0
   material_search: ^0.2.8
   flutter_html: ^0.9.6
-  html: ^0.13.3
+  html: ^0.14.0+2
   url_launcher: ^5.0.2
-  animated_background: ^1.0.1
   dynamic_theme: ^1.0.0
   shared_preferences: ^0.5.2
-  flutter_sequence_animation: "^3.0.0"
-  share: ^0.5.2
+  wakelock: ^0.1.2+8
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -60,12 +58,9 @@ flutter:
   #  - images/a_dot_ham.jpeg
   assets:
     - assets/images/logoaddfihirana.png
-    - assets/images/material1.jpg
-    - assets/images/backgroundAd.jpg
-    - assets/images/backgroundAddNightMode.jpg
-    - assets/images/material1_modeSombre.jpg
+    - assets/images/music_clip.png
     
-    - assets/db_addfihirana.db
+    - assets/add_fihirana.db
 
 
   # An image asset can refer to one or more resolution-specific "variants", see

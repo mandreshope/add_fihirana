@@ -4,8 +4,9 @@ class Settings{
   int modeSombre;
   double fontSize;
   String theme;
+  int wakelock;
   
-  Settings(this.id, this.modeSombre, this.fontSize, this.theme);
+  Settings(this.id, this.modeSombre, this.fontSize, this.theme, this.wakelock);
 
   Map<dynamic, dynamic> toMap() {
     var map = Map<dynamic, dynamic>();
@@ -13,6 +14,7 @@ class Settings{
     map["modeSombre"] = modeSombre;
     map["fontSize"] = fontSize;
     map["theme"] = theme;
+    map["wakelock"] = wakelock;
     
     return map;
   }

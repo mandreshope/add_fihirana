@@ -1,13 +1,13 @@
-// import 'package:add_fihirana/database/dbhelper.dart';
 import 'package:add_fihirana/database/dbhelper.dart';
+import 'package:add_fihirana/page/about_page.dart';
 import 'package:add_fihirana/page/favoris_page.dart';
 import 'package:add_fihirana/page/history_page.dart';
-import 'package:add_fihirana/page/home_page.dart' show HomePage;
-import 'package:add_fihirana/page/about_page.dart';
+import 'package:add_fihirana/page/home_page.dart';
 import 'package:add_fihirana/page/setting_page.dart';
 import 'package:add_fihirana/page/themeColor.dart';
 import 'package:dynamic_theme/dynamic_theme.dart';
 import 'package:flutter/material.dart';
+import 'package:wakelock/wakelock.dart';
 
 void main() => runApp(MyApp());
 
@@ -49,6 +49,11 @@ class _MyAppState extends State<MyApp> {
       onValue.forEach((f) {
         setState(() {
           _theme = f.theme;
+          if(f.wakelock == 0) {
+            Wakelock.toggle(on: false);
+          }else {
+            Wakelock.toggle(on: true);
+          }
         });
       });
     }); 

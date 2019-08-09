@@ -1,5 +1,6 @@
 
 import 'package:add_fihirana/database/dbhelper.dart';
+import 'package:add_fihirana/model/favoris.dart';
 import 'package:add_fihirana/model/history.dart';
 import 'package:add_fihirana/page/setting_page.dart';
 import 'package:add_fihirana/utils/points_clipper.dart';
@@ -38,7 +39,6 @@ class _HiraViewPageState extends State<HiraViewPage> with SingleTickerProviderSt
   Animation<double> animation1, animation2;
   _AnimationStatus animationStatus = _AnimationStatus.end;
 
-  bool val = false;
   int favoris;
 
   var history;
@@ -146,7 +146,7 @@ class _HiraViewPageState extends State<HiraViewPage> with SingleTickerProviderSt
       }
     });
 
-    db.setHistory(History(null, this.title, this.id, dateNow));
+    db.setHistory(History(null, this.title, this.id, dateNow, 0));
     
   }
 
@@ -214,14 +214,7 @@ class _HiraViewPageState extends State<HiraViewPage> with SingleTickerProviderSt
                         fontSize: 20.0,
                       )
                     ),
-                    subtitle: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: <Widget>[
-                        Icon(Icons.group_work, size: 20.0, ),
-                        Text('${hiraList[itemIndex].namelist}'),
-                      ],
-                    ),
+                    subtitle: Text('${hiraList[itemIndex].namelist}'),
                     trailing: Stack(
                       alignment: AlignmentDirectional.center,
                       children: <Widget>[
@@ -244,59 +237,208 @@ class _HiraViewPageState extends State<HiraViewPage> with SingleTickerProviderSt
                               if(hiraList[i-1].favoris == 1) {
 
                                 HomePageState.hiraList[itemIndex].favoris = null;
-
-                                HomePageState.hiraTaloha.forEach((f) {
-                                  if(f.id == hiraList[itemIndex].id) {
-                                    f.favoris = null;
-                                  }
-                                });
-
-                                HomePageState.hira2016.forEach((f) {
-                                  if(f.id == hiraList[itemIndex].id) {
-                                    f.favoris = null;
-                                  }
-                                });
-
-                                HomePageState.hira2017.forEach((f) {
-                                  if(f.id == hiraList[itemIndex].id) {
-                                    f.favoris = null;
-                                  }
-                                });
-
-                                HomePageState.hira2018.forEach((f) {
-                                  if(f.id == hiraList[itemIndex].id) {
-                                    f.favoris = null;
-                                  }
-                                });
                                 
-                                db.setFavoris(hiraList[itemIndex].id, null, null);
+                                HomePageState.hiraSokajyhafa.forEach((f) {
+                                  if(f.id == hiraList[itemIndex].id) {
+                                    f.favoris = null;
+                                  }
+                                });
+
+                                HomePageState.hiraFiankohofana .forEach((f) {
+                                  if(f.id == hiraList[itemIndex].id) {
+                                    f.favoris = null;
+                                  }
+                                });
+
+                                HomePageState.hiraPaska  .forEach((f) {
+                                  if(f.id == hiraList[itemIndex].id) {
+                                    f.favoris = null;
+                                  }
+                                });
+
+                                HomePageState.hiraFideranasyfankalazana.forEach((f) {
+                                  if(f.id == hiraList[itemIndex].id) {
+                                    f.favoris = null;
+                                  }
+                                });
+
+                                HomePageState.hiraFanahyMasina.forEach((f) {
+                                  if(f.id == hiraList[itemIndex].id) {
+                                    f.favoris = null;
+                                  }
+                                });
+
+                                HomePageState.hiraTeninAndriamanitra  .forEach((f) {
+                                  if(f.id == hiraList[itemIndex].id) {
+                                    f.favoris = null;
+                                  }
+                                });
+
+                                HomePageState.hiraFitorianafilazantsara .forEach((f) {
+                                  if(f.id == hiraList[itemIndex].id) {
+                                    f.favoris = null;
+                                  }
+                                });
+
+                                HomePageState.hiraFanatitra  .forEach((f) {
+                                  if(f.id == hiraList[itemIndex].id) {
+                                    f.favoris = null;
+                                  }
+                                });
+
+
+                                HomePageState.hiraFanasannyTompo .forEach((f) {
+                                  if(f.id == hiraList[itemIndex].id) {
+                                    f.favoris = null;
+                                  }
+                                });
+
+                                HomePageState.hiraKrismasy .forEach((f) {
+                                  if(f.id == hiraList[itemIndex].id) {
+                                    f.favoris = null;
+                                  }
+                                });
+
+                                HomePageState.hiraFanosoranampiasa .forEach((f) {
+                                  if(f.id == hiraList[itemIndex].id) {
+                                    f.favoris = null;
+                                  }
+                                });
+
+                                HomePageState.hiraMariazy .forEach((f) {
+                                  if(f.id == hiraList[itemIndex].id) {
+                                    f.favoris = null;
+                                  }
+                                });
+
+                                HomePageState.hiraFanolorantena  .forEach((f) {
+                                  if(f.id == hiraList[itemIndex].id) {
+                                    f.favoris = null;
+                                  }
+                                });
+
+                                HomePageState.hiraFahafatesana  .forEach((f) {
+                                  if(f.id == hiraList[itemIndex].id) {
+                                    f.favoris = null;
+                                  }
+                                });
+
+                                HomePageState.hiraFiravana.forEach((f) {
+                                  if(f.id == hiraList[itemIndex].id) {
+                                    f.favoris = null;
+                                  }
+                                });
+
+                                HomePageState.hiraFanoloranjaza .forEach((f) {
+                                  if(f.id == hiraList[itemIndex].id) {
+                                    f.favoris = null;
+                                  }
+                                });
+
+                                
+                                db.deleteFavoris2(hiraList[itemIndex].id);
+                                db.setFavorisToTableHira(hiraList[itemIndex].id, null);
                                 
                               } else {
                                 HomePageState.hiraList[itemIndex].favoris = 1;
 
-                                HomePageState.hiraTaloha.forEach((f) {
+                                HomePageState.hiraSokajyhafa.forEach((f) {
                                   if(f.id == hiraList[itemIndex].id) {
                                     f.favoris = 1;
                                   }
                                 });
 
-                                HomePageState.hira2016.forEach((f) {
+                                HomePageState.hiraFiankohofana .forEach((f) {
                                   if(f.id == hiraList[itemIndex].id) {
                                     f.favoris = 1;
                                   }
                                 });
 
-                                HomePageState.hira2017.forEach((f) {
+                                HomePageState.hiraPaska.forEach((f) {
                                   if(f.id == hiraList[itemIndex].id) {
                                     f.favoris = 1;
                                   }
                                 });
 
-                                HomePageState.hira2018.forEach((f) {
+                                HomePageState.hiraFideranasyfankalazana.forEach((f) {
                                   if(f.id == hiraList[itemIndex].id) {
                                     f.favoris = 1;
                                   }
                                 });
+
+                                HomePageState.hiraFanahyMasina.forEach((f) {
+                                  if(f.id == hiraList[itemIndex].id) {
+                                    f.favoris = 1;
+                                  }
+                                });
+
+                                HomePageState.hiraTeninAndriamanitra.forEach((f) {
+                                  if(f.id == hiraList[itemIndex].id) {
+                                    f.favoris = 1;
+                                  }
+                                });
+
+                                HomePageState.hiraFitorianafilazantsara.forEach((f) {
+                                  if(f.id == hiraList[itemIndex].id) {
+                                    f.favoris = 1;
+                                  }
+                                });
+
+                                HomePageState.hiraFanatitra.forEach((f) {
+                                  if(f.id == hiraList[itemIndex].id) {
+                                    f.favoris = 1;
+                                  }
+                                });
+
+
+                                HomePageState.hiraFanasannyTompo.forEach((f) {
+                                  if(f.id == hiraList[itemIndex].id) {
+                                    f.favoris = 1;
+                                  }
+                                });
+
+                                HomePageState.hiraKrismasy.forEach((f) {
+                                  if(f.id == hiraList[itemIndex].id) {
+                                    f.favoris = 1;
+                                  }
+                                });
+
+                                HomePageState.hiraFanosoranampiasa.forEach((f) {
+                                  if(f.id == hiraList[itemIndex].id) {
+                                    f.favoris = 1;
+                                  }
+                                });
+
+                                HomePageState.hiraMariazy.forEach((f) {
+                                  if(f.id == hiraList[itemIndex].id) {
+                                    f.favoris = 1;
+                                  }
+                                });
+
+                                HomePageState.hiraFanolorantena.forEach((f) {
+                                  if(f.id == hiraList[itemIndex].id) {
+                                    f.favoris = 1;
+                                  }
+                                });
+
+                                HomePageState.hiraFahafatesana.forEach((f) {
+                                  if(f.id == hiraList[itemIndex].id) {
+                                    f.favoris = 1;
+                                  }
+                                });
+
+                                HomePageState.hiraFiravana.forEach((f) {
+                                  if(f.id == hiraList[itemIndex].id) {
+                                    f.favoris = 1;
+                                  }
+                                });
+
+                                HomePageState.hiraFanoloranjaza.forEach((f) {
+                                  if(f.id == hiraList[itemIndex].id) {
+                                    f.favoris = 1;
+                                  }
+                                });
+
                                 var d = DateTime.now().day;
                                 var m = DateTime.now().month;
                                 var y = DateTime.now().year;
@@ -304,7 +446,8 @@ class _HiraViewPageState extends State<HiraViewPage> with SingleTickerProviderSt
                                 var mn = DateTime.now().minute;
                                 // var s = DateTime.now().second;
                                 var dateNow = '${d < 10 ? '0$d': d}-${m < 10 ? '0$m': m}-$y $h:$mn';
-                                db.setFavoris(hiraList[itemIndex].id, 1, dateNow);
+                                db.setFavoris2(Favoris(null, hiraList[itemIndex].title, hiraList[itemIndex].id, dateNow, 0));
+                                db.setFavorisToTableHira(hiraList[itemIndex].id, 1);
                               }
 
                               // hiraList[itemIndex].favoris == 1  ? db.setFavoris(hiraList[itemIndex].id, null) : db.setFavoris(hiraList[itemIndex].id, 1);
@@ -352,54 +495,12 @@ class _HiraViewPageState extends State<HiraViewPage> with SingleTickerProviderSt
 
   @override
   Widget build(BuildContext context) {
-    var actionTextf = IconButton(
-      icon: Icon(Icons.format_size), 
-      onPressed: () {
-        setState(() {
-          this.val == false ? this.val = true : this.val = false;
-        });
-      },
-
-    );
-    var slider = Container(
-        child: Row(
-          children: <Widget>[
-            Icon(Icons.text_format, size: 20, color: Theme.of(context).primaryTextTheme.title.color,),
-            Container(
-              width: MediaQuery.of(context).size.width*0.5,
-              child: Slider(
-                inactiveColor: Theme.of(context).primaryColorDark,
-                value: this.fontSize,
-                activeColor: Theme.of(context).primaryTextTheme.title.color,
-                min: 10.0,
-                max: 40.0,
-                divisions: 40,
-                onChangeEnd: (_) {
-                  setState(() {
-                    this.val = false;
-                  });
-                },
-                onChanged: (double value) {
-                  setState(() {
-                    this.fontSize = value;
-                    this.db.updateFontSize(this.fontSize);
-                  });
-                },
-              ),
-            ),
-            Icon(Icons.text_format, size: 30, color: Theme.of(context).primaryTextTheme.title.color)
-          ],
-        ),
-    );
+    // final double width = MediaQuery.of(context).size.width;
     return new Scaffold(
         backgroundColor: modeSombre == 1 ? Colors.black : Theme.of(context).scaffoldBackgroundColor,
         appBar: AppBar(
           title: Text('ADD Fihirana'),
           actions: <Widget>[
-            Container(
-              child: this.val == false ? null : slider,
-            ),
-            this.val == false ? actionTextf : Container(),
             PopupMenuButton<String>(
               onSelected: (String newValue) {
                 _btnSelectedVal = newValue;
@@ -424,45 +525,11 @@ class _HiraViewPageState extends State<HiraViewPage> with SingleTickerProviderSt
           //   },
           // )
         ),
-        body: GestureDetector(
-          onVerticalDragDown: (_){
-            setState(() {
-              this.val = false;
-            });
-          },
-          onVerticalDragEnd: (_){
-            setState(() {
-              this.val = false;
-            });
-          },
-          onHorizontalDragDown: (_){
-            setState(() {
-              this.val = false;
-            });
-          },
-          onHorizontalDragEnd: (_){
-            setState(() {
-              this.val = false;
-            });
-          },
-          onTap: () {
-            setState(() {
-              this.val = false;
-            });
-          },
-          onPanDown: (v) {
-            setState(() {
-              this.val = false;
-            });
-          },
-          child: ListView(
-            children: <Widget>[
-              _buildCarousel(context)
-            ],
-          ),
-        )
-  
-        
+        body: ListView(
+          children: <Widget>[
+            _buildCarousel(context)
+          ],
+        ),
     );
   }
   
