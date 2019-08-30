@@ -23,15 +23,20 @@ class _FavorisPageState extends State<FavorisPage> {
   int increment = 0;
 
   bool selectAll = false;
+  bool _checkData;
 
   bool _sortAlfabet = false;
 
   void reloadFavorisList() {
     favoris2.clear();
     db.getFavoris2().then((onValue) {
-      favoris2.addAll(onValue);
       setState(() {
-        favoris2 = favoris2;
+        if(onValue.length == 0) {
+          this._checkData = false;
+        }else {
+          this._checkData = true;
+          favoris2.addAll(onValue);
+        }
       });
     }); 
   }
@@ -39,11 +44,15 @@ class _FavorisPageState extends State<FavorisPage> {
   @override
   void initState() {
     super.initState();
-    
     db.updateAllChechedFavoris2(0).then((onValue) {
       db.getFavoris2().then((onValue) {
-        favoris2.addAll(onValue);
         setState(() {
+          if(onValue.length == 0) {
+            this._checkData = false;
+          }else {
+            this._checkData = true;
+            favoris2.addAll(onValue);
+          }
         });
       });
     });
@@ -80,7 +89,6 @@ class _FavorisPageState extends State<FavorisPage> {
 
   @override
   Widget build(BuildContext context) {
-    print('favoris: ${favoris2.length}');
     
     var noData = Container(
       width: MediaQuery.of(context).size.width,
@@ -171,8 +179,6 @@ class _FavorisPageState extends State<FavorisPage> {
       },
     );
 
-    print('favorisId: $favorisId');
-    print('hiraId: $hiraId');
     return new Scaffold(
       backgroundColor: modeSombre == 1 ? Colors.black : Theme.of(context).scaffoldBackgroundColor,
       appBar: new AppBar(
@@ -214,6 +220,7 @@ class _FavorisPageState extends State<FavorisPage> {
                   showDialog<String>(
                     context: context,
                     builder: (BuildContext context) => AlertDialog(
+                      shape:  RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(20))),
                       title: Row(
                         children: <Widget>[
                           Container(
@@ -560,7 +567,7 @@ class _FavorisPageState extends State<FavorisPage> {
             ]
 
       ),
-      body: favoris2.isEmpty ? noData : list
+      body: this._checkData == false ? noData : list
       
     );
   }

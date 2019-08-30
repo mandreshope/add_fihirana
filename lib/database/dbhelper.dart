@@ -11,7 +11,7 @@ import 'package:path_provider/path_provider.dart';
 
 class DBHelper {
   static Database _db;
-  static String dbName = "add_fihirana.db";
+  static String dbName = "addF_r6.db";
 
   Future<Database> get db async {
     if (_db != null) return _db;

@@ -23,10 +23,10 @@ class _AboutPageState extends State<AboutPage>  with SingleTickerProviderStateMi
   // String _lienFbAddFihirana = 'https://mobile.facebook.com/addfihirana/';
   String _textAboutAddFihirana = """
     🔹Ny hira rehetra ato amin'ity application ity dia hira rehetra nadika avy tao amin'ilay boky fihirana an'ny Assembl&eacute;e De Dieu de Madagascar.<br><br>
-🔹Nadika tanana ny hira rehetra ka noho izany mety hisy diso na dia&nbsp;efa niezaka&nbsp;nandinika&nbsp;sy&nbsp;nijery&nbsp;aza&nbsp;izahay.<br><br>
-🔹Ka noho izany, dia manasa anao izahay mba handefa&nbsp;hafatra miafina izay&nbsp;tononkira&nbsp;hitanao fa misy&nbsp;diso&nbsp;ato amin'ity pejy facebook ity&nbsp;<strong>👉<a href="https://mobile.facebook.com/addfihirana/">ADD Fihirana</a></strong>👈. <br>Aza adino&nbsp;manondro ny&nbsp;laharan'ilay&nbsp;hira&nbsp;hitanao&nbsp;fa misy diso.<br><br>
+🔹Nadika tanana ny hira rehetra ka noho izany mety hisy diso na dia efa niezaka nandinika sy nijery aza izahay.<br><br>
+🔹Ka noho izany, dia manasa anao izahay mba handefa hafatra miafina izay tononkira hitanao fa misy diso ato amin'ity pejy facebook ity, tsindrio eto : <strong>👉<a href="https://mobile.facebook.com/addfihirana/">ADD Fihirana</a></strong>👈. <br>Aza adino manondro ny laharan'ilay hira hitanao fa misy diso.<br><br>
 🔸Misaotra an' 👑 Andriamanitra 👑 izahay tamin'ny fahafahanay nanatontosa ity fitaovana ity, fitaovana fotsiny ihany izahay fa ny saina nahafahanay nanao azy dia avy Taminy irery ihany.<br><br>
-🔸Isaorana manokana ny filohan'ny fiangonana Assembl&eacute;e de Dieu de Madagascar Pasteur&nbsp;<strong>Rijamamy Be Arthur Lala&nbsp;</strong>nanome alalana nahafahanay nanatontosa ity fitaovana ity.<br><br>
+🔸Isaorana manokana ny filohan'ny fiangonana Assembl&eacute;e de Dieu Madagascar Pasteur <strong>Rijamamy Be Arthur Lala </strong>nanome alalana nahafahanay nanatontosa ity fitaovana ity.<br><br>
 🔸Isaorana manokana ireo olona rehetra izay nanaiky ho fitaovana tsara nanampy sy nifanolo-tanana.<br>
   """;
 
@@ -132,7 +132,7 @@ class _AboutPageState extends State<AboutPage>  with SingleTickerProviderStateMi
                   color: Theme.of(context).primaryColor,
                   child: ListTile(
                     leading: Image.asset(
-                      'assets/images/logoaddfihirana.png',
+                      'assets/images/logoaddf.png',
                     ),
                     title: Text('ADD Fihirana',
                       style: TextStyle(
@@ -144,7 +144,7 @@ class _AboutPageState extends State<AboutPage>  with SingleTickerProviderStateMi
                           color: Theme.of(context).primaryColorLight,
                         ),
                     ),
-                    trailing: Text('v1.3.6',
+                    trailing: Text('v1.3.7',
                       style: TextStyle(
                         color: Theme.of(context).primaryTextTheme.title.color,
                       ),
@@ -162,9 +162,7 @@ class _AboutPageState extends State<AboutPage>  with SingleTickerProviderStateMi
                     padding: EdgeInsets.only(bottom: 20),
                     color: Theme.of(context).primaryColor,
                     child: ListTile(
-                      subtitle: Text(
-                        """Add fihirana dia application Android ahitana ireo hiran\'ny fiangonana Assemblée de Dieu de Madagascar sy hira fiderana maro samihafa koa.
-                        """,
+                      subtitle: Text("ADD Fihirana dia application mobile Android izay ahitana ireo hira rehetra izay voarakitra ao anatin'ny boky fihirana Assemblée de Dieu Madagascar.",
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           color: Theme.of(context).primaryTextTheme.title.color,
@@ -195,7 +193,7 @@ class _AboutPageState extends State<AboutPage>  with SingleTickerProviderStateMi
                           width: MediaQuery.of(context).size.width,
                           child: ListTile(
                             title: Text(
-                              'Marihana fa ity fihirana ity dia azon\'ny fiangonana rehetra ampiasaina.',
+                              'Marihina fa ity fihirana ity dia azon\'ny fiangonana rehetra ampiasaina.',
                               style: TextStyle(
                                 fontStyle: FontStyle.italic,
                                 color: Colors.grey[600]
@@ -247,7 +245,7 @@ class _AboutPageState extends State<AboutPage>  with SingleTickerProviderStateMi
                           color: modeSombre == 1 ? Theme.of(context).primaryColorLight : Theme.of(context).primaryColor,
                         ),
                         title: Text(
-                            'Assemblée de Dieu de Madagascar $copyrightMonth'),
+                            'Assemblée de Dieu Madagascar $copyrightMonth'),
                     ),
                     Divider(),
                   ],

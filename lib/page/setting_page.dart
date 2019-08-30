@@ -56,10 +56,12 @@ class _SettingPageState extends State<SettingPage> {
   void reloadSettings() {
     _db.getSettings().then((onValue) {
       onValue.forEach((f) {
-        _modeSombre = f.modeSombre;
-        _theme = f.theme;
-        _fontSize = f.fontSize;
-        _wakelock = f.wakelock;
+        setState(() {
+          _modeSombre = f.modeSombre;
+          _theme = f.theme;
+          _fontSize = f.fontSize;
+          _wakelock = f.wakelock;
+        });
       });
     }); 
   }
@@ -70,13 +72,13 @@ class _SettingPageState extends State<SettingPage> {
 
     _db.getSettings().then((onValue) {
       onValue.forEach((f) {
-        _modeSombre = f.modeSombre;
-        _theme = f.theme;
-        _modeSombre == 0 ? _val = false : _val = true;
-        _fontSize = f.fontSize;
-        _wakelock = f.wakelock;
-        _wakelock == 0 ? _checkBoxVal = false : _checkBoxVal = true;
         setState(() {
+          _modeSombre = f.modeSombre;
+          _theme = f.theme;
+          _modeSombre == 0 ? _val = false : _val = true;
+          _fontSize = f.fontSize;
+          _wakelock = f.wakelock;
+          _wakelock == 0 ? _checkBoxVal = false : _checkBoxVal = true;
         });
       });
     }); 
@@ -87,13 +89,52 @@ class _SettingPageState extends State<SettingPage> {
   Widget build(BuildContext context) {
     final mediaQueryData = MediaQuery.of(context);
     var responsive;
-    var previewC = Container(
-      child: Html(
-        data: _textPriview,
-        defaultTextStyle: TextStyle(
-          fontSize: this._fontSize,
-        ),
-        padding: EdgeInsets.all(10.0),
+    var previewC = Card(
+      elevation: 2.0,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+      color: _modeSombre == 1 ? Theme.of(context).primaryColor : Theme.of(context).primaryColorLight,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: <Widget>[
+          ClipRRect(
+            borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+            child: Container(
+              padding: EdgeInsets.only(bottom: 10, top: 10),
+              color: _modeSombre == 1 ? Theme.of(context).primaryColor : Theme.of(context).primaryColorLight,
+              child: ListTile(
+                dense: true,
+                title: Text('Iza no toa Anao', 
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20.0,
+                  )
+                ),
+                subtitle: Text('Fiankohofana'),
+                trailing: Stack(
+                  alignment: AlignmentDirectional.center,
+                  children: <Widget>[
+                    Icon(Icons.star_border),
+                    IconButton(
+                      icon: Icon(Icons.star, color: Theme.of(context).accentColor),
+                      onPressed: () {}
+                    ),
+                  ],
+                )
+              )
+            ),
+          ),
+          ClipRRect(
+            borderRadius: BorderRadius.vertical(top: Radius.circular(20), bottom: Radius.circular(20) ),
+            child: Html(
+              backgroundColor: _modeSombre == 1 ? Colors.black : Colors.white,
+              data: _textPriview,
+              defaultTextStyle: TextStyle(
+                fontSize: this._fontSize,
+              ),
+              padding: EdgeInsets.all(15),
+            ),
+          )
+        ],
       ),
     );
     ListView listParams = ListView(
@@ -111,14 +152,12 @@ class _SettingPageState extends State<SettingPage> {
                   _db.updateModeSombre(1).then((onValue) {
                     MyApp.restartApp(context);
                     changeBrightness();
-                    reloadSettings();
                   });
                 }
                 if(_val == false) {
                   _db.updateModeSombre(0).then((onValue) {
                     MyApp.restartApp(context);
                     changeBrightness();
-                    reloadSettings();
                   });
                 }
                 
@@ -165,7 +204,7 @@ class _SettingPageState extends State<SettingPage> {
               });
             }, 
 
-          )
+          ),
         ),
 
         Divider(),
@@ -182,10 +221,14 @@ class _SettingPageState extends State<SettingPage> {
               Column(
                 children: <Widget>[
                   Container(
+                    decoration: BoxDecoration(
+                      color: ThemeColor.themeColor(_theme),
+                      borderRadius: BorderRadius.all(Radius.circular(20))
+                    ),
                     margin: EdgeInsets.all(5.0),
                     width: 20.0,
                     height: 20.0,
-                    color: ThemeColor.themeColor(_theme)
+                    
                   )
                 ],
               )
@@ -195,24 +238,46 @@ class _SettingPageState extends State<SettingPage> {
             // Or: showModalBottomSheet(), with model bottom sheet, clicking
             // anywhere will dismiss the bottom sheet.
             showModalBottomSheet(
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
+              isScrollControlled: false,
+              elevation: 0.0,
               context: context,
               builder: (BuildContext context) => Container(
-                decoration: BoxDecoration(
-                  border: Border(top: BorderSide(color: Colors.black12)),
-                ),
                 child: ListView(
+                  padding: EdgeInsets.all(0),
                   shrinkWrap: true,
                   primary: false,
                   children: <Widget>[
+                    Center(
+                      child: Padding(
+                        padding: EdgeInsets.all(10),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Padding(
+                              padding: EdgeInsets.only(right: 5),
+                              child: Icon(Icons.color_lens),
+                            ),
+                            Text('Thème', style: TextStyle(fontSize: 20),)
+                          ],
+                        ),
+                      )
+                    ),
+                    Divider(),
                     Container(
-                      margin: EdgeInsets.all(20.0),
+                      margin: EdgeInsets.only(top: 20),
                       child: Row(
                         mainAxisSize: MainAxisSize.max,
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: <Widget>[
                           Container(
+                            decoration: BoxDecoration(
+                              color: Colors.purple,
+                              borderRadius: BorderRadius.all(Radius.circular(20))
+                            ),
                             child: RaisedButton(
+                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
                               color: Colors.purple,
                               onPressed: () {
                                 this._db.updateTheme('purple').then((val) {
@@ -224,10 +289,14 @@ class _SettingPageState extends State<SettingPage> {
                             margin: EdgeInsets.all(5.0),
                             width: 40.0,
                             height: 40.0,
-                            color: Colors.purple,
                           ),
                           Container(
+                            decoration: BoxDecoration(
+                              color: Colors.green,
+                              borderRadius: BorderRadius.all(Radius.circular(20))
+                            ),
                             child: RaisedButton(
+                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
                               color: Colors.green,
                               onPressed: () {
                                 this._db.updateTheme('green').then((val) {
@@ -239,10 +308,14 @@ class _SettingPageState extends State<SettingPage> {
                             margin: EdgeInsets.all(5.0),
                             width: 40.0,
                             height: 40.0,
-                            color: Colors.green,
                           ),
                           Container(
+                            decoration: BoxDecoration(
+                              color: Colors.pink,
+                              borderRadius: BorderRadius.all(Radius.circular(20))
+                            ),
                             child: RaisedButton(
+                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
                               color: Colors.pink,
                               onPressed: () {
                                 this._db.updateTheme('pink').then((val) {
@@ -254,10 +327,14 @@ class _SettingPageState extends State<SettingPage> {
                             margin: EdgeInsets.all(5.0),
                             width: 40.0,
                             height: 40.0,
-                            color: Colors.pink,
                           ),
                           Container(
+                            decoration: BoxDecoration(
+                              color: Colors.blueGrey,
+                              borderRadius: BorderRadius.all(Radius.circular(20))
+                            ),
                             child: RaisedButton(
+                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
                               color: Colors.blueGrey,
                               onPressed: () {
                                 this._db.updateTheme('blueGrey').then((val) {
@@ -269,10 +346,14 @@ class _SettingPageState extends State<SettingPage> {
                             margin: EdgeInsets.all(5.0),
                             width: 40.0,
                             height: 40.0,
-                            color: Colors.blueGrey,
                           ),
                           Container(
+                            decoration: BoxDecoration(
+                              color: Colors.indigo,
+                              borderRadius: BorderRadius.all(Radius.circular(20))
+                            ),
                             child: RaisedButton(
+                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
                               color: Colors.indigo,
                               onPressed: () {
                                 this._db.updateTheme('indigo').then((val) {
@@ -284,7 +365,6 @@ class _SettingPageState extends State<SettingPage> {
                             margin: EdgeInsets.all(5.0),
                             width: 40.0,
                             height: 40.0,
-                            color: Colors.blueGrey,
                           ),
                         ],
                       )
@@ -297,7 +377,12 @@ class _SettingPageState extends State<SettingPage> {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: <Widget>[
                           Container(
+                            decoration: BoxDecoration(
+                              color: Colors.red,
+                              borderRadius: BorderRadius.all(Radius.circular(20))
+                            ),
                             child: RaisedButton(
+                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
                               color: Colors.red,
                               onPressed: () {
                                 this._db.updateTheme('red').then((val) {
@@ -309,10 +394,14 @@ class _SettingPageState extends State<SettingPage> {
                             margin: EdgeInsets.all(5.0),
                             width: 40.0,
                             height: 40.0,
-                            color: Colors.red,
                           ),
                           Container(
+                            decoration: BoxDecoration(
+                              color: Colors.blue,
+                              borderRadius: BorderRadius.all(Radius.circular(20))
+                            ),
                             child: RaisedButton(
+                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
                               color: Colors.blue,
                               onPressed: () {
                                 this._db.updateTheme('blue').then((val) {
@@ -324,10 +413,14 @@ class _SettingPageState extends State<SettingPage> {
                             margin: EdgeInsets.all(5.0),
                             width: 40.0,
                             height: 40.0,
-                            color: Colors.blue,
                           ),
                           Container(
+                            decoration: BoxDecoration(
+                              color: Colors.deepOrange,
+                              borderRadius: BorderRadius.all(Radius.circular(20))
+                            ),
                             child: RaisedButton(
+                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
                               color: Colors.deepOrange,
                               onPressed: () {
                                 this._db.updateTheme('deepOrange').then((val) {
@@ -339,10 +432,14 @@ class _SettingPageState extends State<SettingPage> {
                             margin: EdgeInsets.all(5.0),
                             width: 40.0,
                             height: 40.0,
-                            color: Colors.deepOrange,
                           ),
                           Container(
+                            decoration: BoxDecoration(
+                              color: Colors.teal,
+                              borderRadius: BorderRadius.all(Radius.circular(20))
+                            ),
                             child: RaisedButton(
+                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
                               color: Colors.teal,
                               onPressed: () {
                                 this._db.updateTheme('teal').then((val) {
@@ -354,10 +451,14 @@ class _SettingPageState extends State<SettingPage> {
                             margin: EdgeInsets.all(5.0),
                             width: 40.0,
                             height: 40.0,
-                            color: Colors.teal,
                           ),
                           Container(
+                            decoration: BoxDecoration(
+                              color: Colors.cyan,
+                              borderRadius: BorderRadius.all(Radius.circular(20))
+                            ),
                             child: RaisedButton(
+                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
                               color: Colors.cyan,
                               onPressed: () {
                                 this._db.updateTheme('cyan').then((val) {
@@ -369,7 +470,6 @@ class _SettingPageState extends State<SettingPage> {
                             margin: EdgeInsets.all(5.0),
                             width: 40.0,
                             height: 40.0,
-                            color: Colors.blueGrey,
                           ),
                         ],
                       )
@@ -428,7 +528,9 @@ class _SettingPageState extends State<SettingPage> {
     DynamicTheme.of(context).setBrightness(
         Theme.of(context).brightness == Brightness.dark
             ? Brightness.light
-            : Brightness.dark);
+            : Brightness.dark).then((_) {
+              reloadSettings();
+            });
   }
 
 }

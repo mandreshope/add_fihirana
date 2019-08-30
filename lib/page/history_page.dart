@@ -22,14 +22,20 @@ class _HistoryPageState extends State<HistoryPage> {
   bool selectAll = false;
 
   bool _sortAlfabet = false;
+  bool _checkData;
 
   int modeSombre;
 
   void reloadHistoryList() {
     history.clear();
     db.getHistory().then((onValue) {
-      history.addAll(onValue);
       setState(() {
+        if(onValue.length == 0) {
+          this._checkData = false;
+        }else {
+          this._checkData = true;
+          history.addAll(onValue);
+        }
       });
     }); 
   }
@@ -40,9 +46,14 @@ class _HistoryPageState extends State<HistoryPage> {
 
     db.updateAllChechedHistory(0).then((onValue) {
       db.getHistory().then((onValue) {
-        history.addAll(onValue);
         setState(() {
-          history = history;
+          if(onValue.length == 0) {
+            this._checkData = false;
+          }else {
+            this._checkData = true;
+            history.addAll(onValue);
+          }
+          
         });
       }); 
     });
@@ -59,7 +70,6 @@ class _HistoryPageState extends State<HistoryPage> {
     db.getSongs().then((onValue) {
       hiraList.addAll(onValue);
       setState(() {
-        hiraList = hiraList;
       });
     });
   }
@@ -195,6 +205,7 @@ class _HistoryPageState extends State<HistoryPage> {
                   showDialog<String>(
                     context: context,
                     builder: (BuildContext context) => AlertDialog(
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(20))),
                       title: Row(
                         children: <Widget>[
                           Container(
@@ -340,7 +351,7 @@ class _HistoryPageState extends State<HistoryPage> {
                 ),
             ]
       ),
-      body: history.isEmpty ? noData : list
+      body: this._checkData == false ? noData : list
       
     );
   }

@@ -12,6 +12,7 @@ import 'package:add_fihirana/utils/shimmer.dart';
 import 'package:add_fihirana/utils/wave_clipper_1.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:material_search/material_search.dart';
 
@@ -54,12 +55,32 @@ class HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
   Future<void> launched;
   // String _phone = '0330297426';
-  String _linkToShareAddFihirana = 'http://web.facebook.com/addfihirana/';
+  String _linkToShareAddFihirana = 'https://add-fihirana.fr.aptoide.com/';
   // https://web.facebook.com/pg/addfihirana/about/
 
   AnimationController _animController;
   Animation<double> animation1, animation2, animation3;
   _AnimationStatus animationStatus = _AnimationStatus.end;
+
+  String _btnSelectedVal;
+
+  bool inputIsValid = true;
+  var valueText;
+  String errorText = '';
+
+  static const menuItems = <String>[
+    'Rechercher par titre',
+    'Rechercher par numéro',
+  ];
+
+  final List<PopupMenuItem<String>> _popUpMenuItems = menuItems
+  .map(
+    (String value) => PopupMenuItem<String>(
+          value: value,
+          child: Text(value),
+        ),
+  )
+  .toList();
 
   void reloadHiraList() {
     hiraList.clear();
@@ -190,7 +211,7 @@ class HomePageState extends State<HomePage> with TickerProviderStateMixin {
     });
 
     _animController = new AnimationController(
-      duration: const Duration(seconds: 3), 
+      duration: const Duration(seconds: 2),
       vsync: this,
 	  );
 
@@ -225,6 +246,7 @@ class HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
   ListView hiraListWidget(List<Hira> hiraList2) {
     return ListView.builder(
+      padding: EdgeInsets.only(top: 5.0),
       itemCount: hiraList2.length,
       itemBuilder: (BuildContext context, int index) {
         return Card(
@@ -295,8 +317,8 @@ class HomePageState extends State<HomePage> with TickerProviderStateMixin {
     return new MaterialPageRoute<String>(
         settings: new RouteSettings(
             name: 'material_search',
-            isInitialRoute: false,
-            arguments: modeSombre),
+            isInitialRoute: true,
+        ),
         builder: (BuildContext context) {
           return new Material(
             child: new MaterialSearch<String>(
@@ -309,7 +331,7 @@ class HomePageState extends State<HomePage> with TickerProviderStateMixin {
                   .map((Hira v) => new MaterialSearchResult<String>(
                         icon: Icons.queue_music,
                         value: v.title,
-                        text: "${v.title}",
+                        text: "${v.id}. ${v.title}",
                       ))
                   .toList(),
               filter: (dynamic value, String criteria) {
@@ -331,6 +353,160 @@ class HomePageState extends State<HomePage> with TickerProviderStateMixin {
       setState(() => skHiraList = value as String);
     });
   }
+
+  _buildMaterialSearchForNumberPage(BuildContext context) {
+    this.valueText = null;
+          this.errorText = '';
+    return new MaterialPageRoute<String>(
+        settings: new RouteSettings(
+            name: 'material_searchForNumber',
+            isInitialRoute: true,
+        ),
+        builder: (BuildContext context) {
+          return Material(
+            color: Theme.of(context).scaffoldBackgroundColor,
+              child: ListView(
+                children: <Widget>[
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Container(
+                        width: 50,
+                        margin: EdgeInsets.all(10),
+                        child: Image.asset('assets/images/logoaddf.png'),
+                      ),
+                      Divider(),
+                      Padding(
+                        padding: EdgeInsets.only(right: 50, left: 50),
+                        child: TextField(
+                        
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: 30,
+                          ),
+                          maxLength: 3,
+                          keyboardType: TextInputType.numberWithOptions(decimal: false, signed: false),
+                          inputFormatters: [BlacklistingTextInputFormatter(new RegExp('[\\-|\\ \\,|\\.]'))],
+                          decoration: InputDecoration(
+                            filled: true,
+                            errorStyle: TextStyle(
+                              fontWeight: FontWeight.bold
+                            ),
+                            hintText: 'Tapez le numéro',
+                            errorText: inputIsValid ? '' :'$errorText',
+                            border: UnderlineInputBorder(
+                              borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                            ),
+                          ),
+
+                          onSubmitted: (val) async {
+                            if(inputIsValid == true) {
+                              await Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => HiraViewPage(
+                                      title: hiraList[int.parse(val) - 1].title,
+                                      hiraList: hiraList,
+                                    )
+                                )
+                              );
+                              setState(() {
+                                this.errorText = '';
+                              });
+                              
+                            }
+                          },
+                          onChanged: (val) {
+                            var value = int.tryParse(val);
+                            setState(() {
+                              valueText = int.tryParse(val);
+                            });
+
+                            if(value == null) {
+                              setState(() {
+                                inputIsValid = false;
+                                this.errorText = " S'il vous plaît entrer un entier";
+                              });
+                              
+                            }else {
+                              if(value <= hiraList.length && value > 0) {
+                                setState(() {
+                                  inputIsValid = true;
+                                });
+                              }else {
+                                setState(() {
+                                  inputIsValid = false;
+                                  this.errorText = ' Valeur invalide: pas dans la plage 0..${hiraList.length+1}';
+                                });
+                              }
+                            }
+                          },
+                          
+                        ),
+                      ),
+                      RaisedButton.icon(
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                        color: Theme.of(context).primaryColor,
+                        icon: Icon(Icons.search, color: Colors.white),
+                        label: Text('Rechercher', style: TextStyle(color: Colors.white)),
+                        onPressed: () async {
+
+                          if(valueText == null) {
+                              setState(() {
+                                inputIsValid = false;
+                                this.errorText = " S'il vous plaît entrer un entier";
+                              });
+                              
+                            }else {
+                              if(valueText <= hiraList.length && valueText > 0) {
+                                setState(() {
+                                  inputIsValid = true;
+                                });
+                              }else {
+                                setState(() {
+                                  inputIsValid = false;
+                                  this.errorText = ' Valeur invalide: pas dans la plage 0..${hiraList.length+1}';
+                                });
+                              }
+                            }
+
+                            if(inputIsValid == true) {
+                              await Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => HiraViewPage(
+                                      title: hiraList[valueText-1].title,
+                                      hiraList: hiraList,
+                                    )
+                                )
+                              );
+                              setState(() {
+                                this.errorText = '';
+                              });
+                              
+                            }
+                            
+                        }, 
+                      )
+                    ],
+                  )
+                ],
+              ),
+            );
+        });
+  }
+
+  _showMaterialSearchForNumer(BuildContext context) {
+    Navigator.of(context)
+        .push(_buildMaterialSearchForNumberPage(context)).then((_){
+          setState(() {
+            reloadSettings();
+            this.errorText = '';
+          });
+        });
+  }
+
+  
 
   void _searchgoToHiraViewPage(BuildContext context, value) async {
     // start the SecondScreen and wait for it to finish with a result
@@ -410,7 +586,7 @@ class HomePageState extends State<HomePage> with TickerProviderStateMixin {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: <Widget>[
                           Image.asset(
-                            'assets/images/logoaddfihirana.png',
+                            'assets/images/logoaddf.png',
                             fit: BoxFit.fill,
                             width: 50.0,
                             height: 50.0,
@@ -427,7 +603,7 @@ class HomePageState extends State<HomePage> with TickerProviderStateMixin {
                           Divider(
                             color: Colors.transparent,
                           ),
-                          Text('FIHIRANA ASSEMBLEE DE DIEU DE MADAGASCAR', style: TextStyle(
+                          Text('FIHIRANA ASSEMBLEE DE DIEU MADAGASCAR', style: TextStyle(
                               color: Theme.of(context).primaryTextTheme.title.color,
                               fontSize: 12,
                               fontWeight: FontWeight.bold
@@ -451,7 +627,7 @@ class HomePageState extends State<HomePage> with TickerProviderStateMixin {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: <Widget>[
                           Image.asset(
-                            'assets/images/logoaddfihirana.png',
+                            'assets/images/logoaddf.png',
                             fit: BoxFit.fill,
                             width: 50.0,
                             height: 50.0,
@@ -469,7 +645,7 @@ class HomePageState extends State<HomePage> with TickerProviderStateMixin {
                           Divider(
                             color: Colors.transparent,
                           ),
-                          Text('FIHIRANA ASSEMBLEE DE DIEU DE MADAGASCAR', style: TextStyle(
+                          Text('FIHIRANA ASSEMBLEE DE DIEU MADAGASCAR', style: TextStyle(
                               color: Theme.of(context).primaryTextTheme.title.color,
                               fontSize: 12,
                               fontWeight: FontWeight.bold
@@ -540,16 +716,16 @@ class HomePageState extends State<HomePage> with TickerProviderStateMixin {
           ),
           title: Text('Partager l\'application'),
           onTap: () {
+            Navigator.pop(context);
             // Navigator.pop(context); // close the drawer
             // setState(() {
             //   this.launched = _launchInBrowser(_addFihiranaUrl);
             //   // this._launched = _makePhoneCall('tel:$_phone');
             // });
             final RenderBox box = context.findRenderObject();
-                              Share.plainText(text: 'Tiako be ity application ity 😍😃: $_linkToShareAddFihirana').share(
-                                  sharePositionOrigin:
-                                      box.localToGlobal(Offset.zero) &
-                                          box.size);
+            Share.plainText(
+              text: 'Tiako be ity application ity 😍😃: $_linkToShareAddFihirana'
+            ).share(sharePositionOrigin: box.localToGlobal(Offset.zero) & box.size);
           },
         ),
         ListTile(
@@ -572,7 +748,7 @@ class HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
     var noData = ListView(
       padding:
-          EdgeInsets.only(top: 35.0, left: 16.0, right: 16.0, bottom: 16.0),
+          EdgeInsets.only(top: 20.0, left: 16.0, right: 16.0, bottom: 16.0),
       children: <Widget>[
         Shimmer.fromColors(
           baseColor: Colors.grey[300],
@@ -743,16 +919,22 @@ class HomePageState extends State<HomePage> with TickerProviderStateMixin {
                           }
                         },
                       ),
-                      IconButton(
-                        tooltip: 'Rechercher',
+                      PopupMenuButton<String>(
                         icon: const Icon(Icons.search),
-                        onPressed: () async {
-                          _showMaterialSearch(context);
-                          reloadSettings();
+                        onSelected: (String newValue) {
+                          _btnSelectedVal = newValue;
+                          if(_btnSelectedVal == 'Rechercher par titre') {
+                            _showMaterialSearch(context);
+                            reloadSettings();
+                          }else {
+                            _showMaterialSearchForNumer(context);
+                            reloadSettings();
+                          }
                         },
+                        itemBuilder: (BuildContext context) => _popUpMenuItems,
                       ),
                     ],
-                    expandedHeight: 160.0,
+                    expandedHeight: 200.0,
                     flexibleSpace: FlexibleSpaceBar(
                         collapseMode: CollapseMode.pin,
                         title: Text("ADD Fihirana"),
@@ -781,7 +963,7 @@ class HomePageState extends State<HomePage> with TickerProviderStateMixin {
                                       transform: Matrix4.translationValues(animation1.value*width, 0.0, 0.0),
                                       child: Align(
                                         alignment: Alignment.center,
-                                        child: Image.asset('assets/images/logoaddfihirana.png', width: width*0.3/2,),
+                                        child: Image.asset('assets/images/logoaddf.png', width: width*0.3/2,),
                                       ),
                                     ),
                                     Transform(
