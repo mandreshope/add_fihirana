@@ -748,57 +748,35 @@ class HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
     var noData = ListView(
       padding:
-          EdgeInsets.only(top: 20.0, left: 16.0, right: 16.0, bottom: 16.0),
+          EdgeInsets.only(top: 5.0, left: 5.0),
       children: <Widget>[
         Shimmer.fromColors(
           baseColor: Colors.grey[300],
           highlightColor: Colors.grey[100],
           child: Column(
-            children: [0, 1, 2, 4, 5, 6, 7, 8]
-                .map((_) => Padding(
-                      padding: const EdgeInsets.only(bottom: 20.0),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          CircleAvatar(
-                            backgroundColor: Colors.white,
+            children: [0, 1, 2, 4, 5, 6]
+                .map((_) => ListTile(
+                      leading: CircleAvatar(
+                        backgroundColor: Colors.white,
+                      ),
+                      title: Container(
+                        height: 8.0,
+                        color: Colors.white,
+                      ),
+                      subtitle: Row(
+                        children: <Widget>[
+                          Container(
+                            height: 6.0,
+                            width: width/4,
+                            color: Colors.white,
                           ),
-                          Padding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 8.0),
-                          ),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Container(
-                                  width: double.infinity,
-                                  height: 8.0,
-                                  color: Colors.white,
-                                ),
-                                Padding(
-                                  padding:
-                                      const EdgeInsets.symmetric(vertical: 2.0),
-                                ),
-                                Container(
-                                  width: double.infinity,
-                                  height: 8.0,
-                                  color: Colors.white,
-                                ),
-                                Padding(
-                                  padding:
-                                      const EdgeInsets.symmetric(vertical: 2.0),
-                                ),
-                                Container(
-                                  width: 40.0,
-                                  height: 8.0,
-                                  color: Colors.white,
-                                ),
-                              ],
-                            ),
-                          )
                         ],
                       ),
+                      trailing: IconButton(
+                        icon: Icon(Icons.star),
+                        onPressed: (){},
+                      ),
+                          
                     ))
                 .toList(),
           ),
@@ -827,7 +805,7 @@ class HomePageState extends State<HomePage> with TickerProviderStateMixin {
     
 
     final _kTabPages = <Widget>[
-      hiraList.isEmpty ? noData : hiraListSokajyhafa,
+      hiraList.isEmpty ? noData : noData,
       hiraList.isEmpty ? noData : hiraListFiankohofana,
       hiraList.isEmpty ? noData : hiraListPaska,
       hiraList.isEmpty ? noData : hiraListFideranasyfankalazana,
