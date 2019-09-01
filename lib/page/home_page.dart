@@ -805,7 +805,7 @@ class HomePageState extends State<HomePage> with TickerProviderStateMixin {
     
 
     final _kTabPages = <Widget>[
-      hiraList.isEmpty ? noData : noData,
+      hiraList.isEmpty ? noData : hiraListSokajyhafa,
       hiraList.isEmpty ? noData : hiraListFiankohofana,
       hiraList.isEmpty ? noData : hiraListPaska,
       hiraList.isEmpty ? noData : hiraListFideranasyfankalazana,
