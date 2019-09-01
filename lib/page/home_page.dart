@@ -773,7 +773,7 @@ class HomePageState extends State<HomePage> with TickerProviderStateMixin {
                         ],
                       ),
                       trailing: IconButton(
-                        icon: Icon(Icons.star),
+                        icon: Icon(Icons.star_border),
                         onPressed: (){},
                       ),
                           
