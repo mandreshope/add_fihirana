@@ -766,7 +766,7 @@ class HomePageState extends State<HomePage> with TickerProviderStateMixin {
                       subtitle: Row(
                         children: <Widget>[
                           Container(
-                            height: 6.0,
+                            height: 7.0,
                             width: width/4,
                             color: Colors.white,
                           ),
