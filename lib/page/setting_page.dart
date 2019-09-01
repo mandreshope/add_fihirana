@@ -51,6 +51,31 @@ class _SettingPageState extends State<SettingPage> {
 <br>&nbsp;&nbsp;&nbsp;Ny fitiavanay Anao mandrakizay</i>
 """;
 
+    final List<String> titleColor = [
+      "purple",
+      "green",
+      "pink",
+      "blueGrey",
+      "indigo",
+      "red",
+      "blue",
+      "deepOrange",
+      "teal",
+      "cyan"
+    ];
+    final List<Color> colorTheme = [
+      Colors.purple,
+      Colors.green,
+      Colors.pink,
+      Colors.blueGrey,
+      Colors.indigo,
+      Colors.red,
+      Colors.blue,
+      Colors.deepOrange,
+      Colors.teal,
+      Colors.cyan,
+    ];
+
   _SettingPageState();
 
   void reloadSettings() {
@@ -270,17 +295,17 @@ class _SettingPageState extends State<SettingPage> {
                         mainAxisSize: MainAxisSize.max,
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.center,
-                        children: <Widget>[
-                          Container(
-                            decoration: BoxDecoration(
-                              color: Colors.purple,
-                              borderRadius: BorderRadius.all(Radius.circular(20))
-                            ),
-                            child: RaisedButton(
-                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-                              color: Colors.purple,
-                              onPressed: () {
-                                this._db.updateTheme('purple').then((val) {
+                        children: [0,1,2,3,4].map((f) {
+                          return Container(
+                            child: GestureDetector(
+                              child: CircleAvatar(
+                                child: _theme == titleColor[f] 
+                                ? Center(child: Icon(Icons.done, color: Colors.white,) ,)
+                                : null,
+                                backgroundColor: colorTheme[f],
+                              ),
+                              onTap: () {
+                                this._db.updateTheme(titleColor[f]).then((val) {
                                   MyApp.restartApp(context);
                                   reloadSettings();
                                 });
@@ -289,84 +314,8 @@ class _SettingPageState extends State<SettingPage> {
                             margin: EdgeInsets.all(5.0),
                             width: 40.0,
                             height: 40.0,
-                          ),
-                          Container(
-                            decoration: BoxDecoration(
-                              color: Colors.green,
-                              borderRadius: BorderRadius.all(Radius.circular(20))
-                            ),
-                            child: RaisedButton(
-                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-                              color: Colors.green,
-                              onPressed: () {
-                                this._db.updateTheme('green').then((val) {
-                                  MyApp.restartApp(context);
-                                  reloadSettings();
-                                });
-                              },
-                            ),
-                            margin: EdgeInsets.all(5.0),
-                            width: 40.0,
-                            height: 40.0,
-                          ),
-                          Container(
-                            decoration: BoxDecoration(
-                              color: Colors.pink,
-                              borderRadius: BorderRadius.all(Radius.circular(20))
-                            ),
-                            child: RaisedButton(
-                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-                              color: Colors.pink,
-                              onPressed: () {
-                                this._db.updateTheme('pink').then((val) {
-                                  MyApp.restartApp(context);
-                                  reloadSettings();
-                                });
-                              },
-                            ),
-                            margin: EdgeInsets.all(5.0),
-                            width: 40.0,
-                            height: 40.0,
-                          ),
-                          Container(
-                            decoration: BoxDecoration(
-                              color: Colors.blueGrey,
-                              borderRadius: BorderRadius.all(Radius.circular(20))
-                            ),
-                            child: RaisedButton(
-                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-                              color: Colors.blueGrey,
-                              onPressed: () {
-                                this._db.updateTheme('blueGrey').then((val) {
-                                  MyApp.restartApp(context);
-                                  reloadSettings();
-                                });
-                              },
-                            ),
-                            margin: EdgeInsets.all(5.0),
-                            width: 40.0,
-                            height: 40.0,
-                          ),
-                          Container(
-                            decoration: BoxDecoration(
-                              color: Colors.indigo,
-                              borderRadius: BorderRadius.all(Radius.circular(20))
-                            ),
-                            child: RaisedButton(
-                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-                              color: Colors.indigo,
-                              onPressed: () {
-                                this._db.updateTheme('indigo').then((val) {
-                                  MyApp.restartApp(context);
-                                  reloadSettings();
-                                });
-                              },
-                            ),
-                            margin: EdgeInsets.all(5.0),
-                            width: 40.0,
-                            height: 40.0,
-                          ),
-                        ],
+                          );
+                        }).toList()
                       )
                     ),
                     Container(
@@ -375,17 +324,17 @@ class _SettingPageState extends State<SettingPage> {
                         mainAxisSize: MainAxisSize.max,
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.center,
-                        children: <Widget>[
-                          Container(
-                            decoration: BoxDecoration(
-                              color: Colors.red,
-                              borderRadius: BorderRadius.all(Radius.circular(20))
-                            ),
-                            child: RaisedButton(
-                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-                              color: Colors.red,
-                              onPressed: () {
-                                this._db.updateTheme('red').then((val) {
+                        children: [5,6,7,8,9].map((f) {
+                          return Container(
+                            child: GestureDetector(
+                              child: CircleAvatar(
+                                child: _theme == titleColor[f] 
+                                ? Center(child: Icon(Icons.done, color: Colors.white,) ,)
+                                : null,
+                                backgroundColor: colorTheme[f],
+                              ),
+                              onTap: () {
+                                this._db.updateTheme(titleColor[f]).then((val) {
                                   MyApp.restartApp(context);
                                   reloadSettings();
                                 });
@@ -394,84 +343,8 @@ class _SettingPageState extends State<SettingPage> {
                             margin: EdgeInsets.all(5.0),
                             width: 40.0,
                             height: 40.0,
-                          ),
-                          Container(
-                            decoration: BoxDecoration(
-                              color: Colors.blue,
-                              borderRadius: BorderRadius.all(Radius.circular(20))
-                            ),
-                            child: RaisedButton(
-                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-                              color: Colors.blue,
-                              onPressed: () {
-                                this._db.updateTheme('blue').then((val) {
-                                  MyApp.restartApp(context);
-                                  reloadSettings();
-                                });
-                              },
-                            ),
-                            margin: EdgeInsets.all(5.0),
-                            width: 40.0,
-                            height: 40.0,
-                          ),
-                          Container(
-                            decoration: BoxDecoration(
-                              color: Colors.deepOrange,
-                              borderRadius: BorderRadius.all(Radius.circular(20))
-                            ),
-                            child: RaisedButton(
-                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-                              color: Colors.deepOrange,
-                              onPressed: () {
-                                this._db.updateTheme('deepOrange').then((val) {
-                                  MyApp.restartApp(context);
-                                  reloadSettings();
-                                });
-                              },
-                            ),
-                            margin: EdgeInsets.all(5.0),
-                            width: 40.0,
-                            height: 40.0,
-                          ),
-                          Container(
-                            decoration: BoxDecoration(
-                              color: Colors.teal,
-                              borderRadius: BorderRadius.all(Radius.circular(20))
-                            ),
-                            child: RaisedButton(
-                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-                              color: Colors.teal,
-                              onPressed: () {
-                                this._db.updateTheme('teal').then((val) {
-                                  MyApp.restartApp(context);
-                                  reloadSettings();
-                                });
-                              },
-                            ),
-                            margin: EdgeInsets.all(5.0),
-                            width: 40.0,
-                            height: 40.0,
-                          ),
-                          Container(
-                            decoration: BoxDecoration(
-                              color: Colors.cyan,
-                              borderRadius: BorderRadius.all(Radius.circular(20))
-                            ),
-                            child: RaisedButton(
-                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-                              color: Colors.cyan,
-                              onPressed: () {
-                                this._db.updateTheme('cyan').then((val) {
-                                  MyApp.restartApp(context);
-                                  reloadSettings();
-                                });
-                              },
-                            ),
-                            margin: EdgeInsets.all(5.0),
-                            width: 40.0,
-                            height: 40.0,
-                          ),
-                        ],
+                          );
+                        }).toList()
                       )
                     )
                   ],
