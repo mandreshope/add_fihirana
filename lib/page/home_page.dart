@@ -838,6 +838,13 @@ class HomePageState extends State<HomePage> with TickerProviderStateMixin {
               headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
                 return <Widget>[
                   SliverAppBar(
+                    leading: IconButton(
+                      icon: Icon(Icons.menu),
+                      tooltip: 'Menu',
+                      onPressed: () {
+                        Scaffold.of(context).openDrawer();
+                      },
+                    ),
                     pinned: true,
                     backgroundColor: Theme.of(context).primaryColor,
                     actions: <Widget>[
@@ -899,6 +906,7 @@ class HomePageState extends State<HomePage> with TickerProviderStateMixin {
                       ),
                       PopupMenuButton<String>(
                         icon: const Icon(Icons.search),
+                        tooltip: 'Rechercher',
                         onSelected: (String newValue) {
                           _btnSelectedVal = newValue;
                           if(_btnSelectedVal == 'Rechercher par titre') {
