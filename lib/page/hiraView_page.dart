@@ -278,7 +278,7 @@ class _HiraViewPageState extends State<HiraViewPage> with SingleTickerProviderSt
                                   Icon(Icons.star, color: Theme.of(context).accentColor)
                                 : 
                                   Icon(Icons.star_border, color: Theme.of(context).accentColor,),
-                              tooltip: 'Mettre au favoris',
+                              tooltip: 'Mettre aux favoris',
                               onPressed: () {
                                 _handleStarIcon();
                                 
