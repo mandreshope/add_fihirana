@@ -543,7 +543,17 @@ class _HiraViewPageState extends State<HiraViewPage> with SingleTickerProviderSt
         return <Widget> [
           SliverAppBar(
             pinned: true,
-            title: Text('ADD Fihirana'),
+            title: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: <Widget>[
+                Container(
+                  width: 30,
+                  margin: EdgeInsets.only(right: 5.0, top: 0.0, left: 0.0, bottom: 0.0),
+                  child: Image.asset('assets/images/logoaddf.png'),
+                ),
+                Text('ADD Fihirana')
+              ],
+            ),
             actions: <Widget>[
               PopupMenuButton<int>(
                 onSelected: (int newValue) {

@@ -234,7 +234,7 @@ class HomePageState extends State<HomePage> with TickerProviderStateMixin {
 	  );
 
     _animController2 = new AnimationController(
-      duration: const Duration(milliseconds: 300),
+      duration: const Duration(milliseconds: 400),
       vsync: this,
 	  );
 
@@ -948,13 +948,13 @@ class HomePageState extends State<HomePage> with TickerProviderStateMixin {
                                   margin: EdgeInsets.all(2),
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.all(Radius.circular(30)),
-                                    color: Colors.white,
+                                    color: modeSombre == 1 ? Theme.of(context).primaryColor: Colors.white,
                                   ),
                                   child: TextField(
                                     readOnly: true,
                                     decoration: InputDecoration(
                                       contentPadding: EdgeInsets.all(15),
-                                      prefixIcon: Icon(Icons.search, color: Theme.of(context).primaryColor,),
+                                      prefixIcon: Icon(Icons.search, color: Colors.grey[600],),
                                       border: InputBorder.none,
                                       hintText: 'Rechercher',
                                     ),
