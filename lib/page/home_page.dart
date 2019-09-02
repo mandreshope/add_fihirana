@@ -12,9 +12,9 @@ import 'package:add_fihirana/utils/shimmer.dart';
 import 'package:add_fihirana/utils/wave_clipper_1.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:material_search/material_search.dart';
+import 'dart:math';
 
 class HomePage extends StatefulWidget {
   static const String routeName = "/home";
@@ -48,7 +48,11 @@ class HomePageState extends State<HomePage> with TickerProviderStateMixin {
   static List<Hira> hiraFanoloranjaza = [];
   static const int lengthOfTab = 16;
 
+  ScrollController _scrollcontroller;
+  dynamic _offset = 0.0;
+
   bool _sortAlfabet = false;
+  bool _searchIsHidden = false;
 
   int modeSombre;
   var db = DBHelper();
@@ -59,28 +63,21 @@ class HomePageState extends State<HomePage> with TickerProviderStateMixin {
   // https://web.facebook.com/pg/addfihirana/about/
 
   AnimationController _animController;
-  Animation<double> animation1, animation2, animation3;
+  AnimationController _animController2;
+  Animation<double> animation1, animation2, animation3, animation4, animationTitleBar;
   _AnimationStatus animationStatus = _AnimationStatus.end;
-
-  String _btnSelectedVal;
 
   bool inputIsValid = true;
   var valueText;
-  String errorText = '';
+  int menuSelected = 0;
+
+  bool randomBool = false;
 
   static const menuItems = <String>[
     'Rechercher par titre',
     'Rechercher par numéro',
   ];
 
-  final List<PopupMenuItem<String>> _popUpMenuItems = menuItems
-  .map(
-    (String value) => PopupMenuItem<String>(
-          value: value,
-          child: Text(value),
-        ),
-  )
-  .toList();
 
   void reloadHiraList() {
     hiraList.clear();
@@ -109,9 +106,30 @@ class HomePageState extends State<HomePage> with TickerProviderStateMixin {
   //   }
   // }
 
+  _scrollListener() {
+    setState(() {
+      this._offset = _scrollcontroller.offset.roundToDouble();
+      if(this._offset >= 174.0) {
+        _searchIsHidden = true;
+        _animController.reverse();
+        randomBool = Random().nextBool();
+        _animController2.forward();
+      }else  {
+        _searchIsHidden = false;
+        _animController.forward();
+        _animController2.reset();
+      }
+    });
+    
+  }
+
   @override
   void initState() {
     super.initState();
+
+    _scrollcontroller = ScrollController();
+
+    _scrollcontroller.addListener(_scrollListener);
 
     db.getSettings().then((onValue) {
       onValue.forEach((f) {
@@ -211,9 +229,21 @@ class HomePageState extends State<HomePage> with TickerProviderStateMixin {
     });
 
     _animController = new AnimationController(
-      duration: const Duration(seconds: 2),
+      duration: const Duration(seconds: 1),
       vsync: this,
 	  );
+
+    _animController2 = new AnimationController(
+      duration: const Duration(milliseconds: 300),
+      vsync: this,
+	  );
+
+    animationTitleBar = Tween(begin: 1.0, end: 0.0).animate(
+      new CurvedAnimation(
+          parent: _animController2,
+          curve:  Curves.linear,
+      ),
+    );
 
     animation1 = Tween(begin: 1.0, end: 0.0).animate(
       new CurvedAnimation(
@@ -225,14 +255,21 @@ class HomePageState extends State<HomePage> with TickerProviderStateMixin {
     animation2 = Tween(begin: -1.0, end: 0.0).animate(
       new CurvedAnimation(
           parent: _animController,
-          curve: Interval(0.7, 1.0, curve: Curves.fastOutSlowIn), 
+          curve: Interval(0.5, 1.0, curve: Curves.fastOutSlowIn), 
       ),
     );
 
     animation3 = Tween(begin: 1.0, end: 0.0).animate(
       new CurvedAnimation(
           parent: _animController,
-          curve: Interval(0.8, 1.0, curve: Curves.fastOutSlowIn), 
+          curve: Interval(0.7, 1.0, curve: Curves.fastOutSlowIn), 
+      ),
+    );
+
+    animation4 = Tween(begin: 1.0, end: 0.0).animate(
+      new CurvedAnimation(
+          parent: _animController,
+          curve: Interval(0.9, 1.0, curve: Curves.fastOutSlowIn), 
       ),
     );
 
@@ -241,6 +278,8 @@ class HomePageState extends State<HomePage> with TickerProviderStateMixin {
   @override
 	void dispose(){
 	  _animController.dispose();
+    _scrollcontroller.removeListener(_scrollListener);
+    _scrollcontroller.dispose();
 	  super.dispose();
 	}
 
@@ -326,11 +365,11 @@ class HomePageState extends State<HomePage> with TickerProviderStateMixin {
                   ? ThemeData.dark().backgroundColor
                   : Colors.white,
               iconColor: modeSombre == 1 ? Colors.white : Colors.black,
-              placeholder: 'Tapez le titre...',
+              placeholder: 'Tapez le titre ou le numéro...',
               results: hiraList
                   .map((Hira v) => new MaterialSearchResult<String>(
                         icon: Icons.queue_music,
-                        value: v.title,
+                        value: '${v.id}${v.title}',
                         text: "${v.id}. ${v.title}",
                       ))
                   .toList(),
@@ -353,168 +392,20 @@ class HomePageState extends State<HomePage> with TickerProviderStateMixin {
       setState(() => skHiraList = value as String);
     });
   }
-
-  _buildMaterialSearchForNumberPage(BuildContext context) {
-    this.valueText = null;
-          this.errorText = '';
-    return new MaterialPageRoute<String>(
-        settings: new RouteSettings(
-            name: 'material_searchForNumber',
-            isInitialRoute: true,
-        ),
-        builder: (BuildContext context) {
-          return Material(
-            color: Theme.of(context).scaffoldBackgroundColor,
-              child: ListView(
-                children: <Widget>[
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Container(
-                        width: 50,
-                        margin: EdgeInsets.all(10),
-                        child: Image.asset('assets/images/logoaddf.png'),
-                      ),
-                      Divider(),
-                      Padding(
-                        padding: EdgeInsets.only(right: 50, left: 50),
-                        child: TextField(
-                        
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontSize: 30,
-                          ),
-                          maxLength: 3,
-                          keyboardType: TextInputType.numberWithOptions(decimal: false, signed: false),
-                          inputFormatters: [BlacklistingTextInputFormatter(new RegExp('[\\-|\\ \\,|\\.]'))],
-                          decoration: InputDecoration(
-                            filled: true,
-                            errorStyle: TextStyle(
-                              fontWeight: FontWeight.bold
-                            ),
-                            hintText: 'Tapez le numéro',
-                            errorText: inputIsValid ? '' :'$errorText',
-                            border: UnderlineInputBorder(
-                              borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                            ),
-                          ),
-
-                          onSubmitted: (val) async {
-                            if(inputIsValid == true) {
-                              await Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => HiraViewPage(
-                                      title: hiraList[int.parse(val) - 1].title,
-                                      hiraList: hiraList,
-                                    )
-                                )
-                              );
-                              setState(() {
-                                this.errorText = '';
-                              });
-                              
-                            }
-                          },
-                          onChanged: (val) {
-                            var value = int.tryParse(val);
-                            setState(() {
-                              valueText = int.tryParse(val);
-                            });
-
-                            if(value == null) {
-                              setState(() {
-                                inputIsValid = false;
-                                this.errorText = " S'il vous plaît entrer un entier";
-                              });
-                              
-                            }else {
-                              if(value <= hiraList.length && value > 0) {
-                                setState(() {
-                                  inputIsValid = true;
-                                });
-                              }else {
-                                setState(() {
-                                  inputIsValid = false;
-                                  this.errorText = ' Valeur invalide: pas dans la plage 0..${hiraList.length+1}';
-                                });
-                              }
-                            }
-                          },
-                          
-                        ),
-                      ),
-                      RaisedButton.icon(
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-                        color: Theme.of(context).primaryColor,
-                        icon: Icon(Icons.search, color: Colors.white),
-                        label: Text('Rechercher', style: TextStyle(color: Colors.white)),
-                        onPressed: () async {
-
-                          if(valueText == null) {
-                              setState(() {
-                                inputIsValid = false;
-                                this.errorText = " S'il vous plaît entrer un entier";
-                              });
-                              
-                            }else {
-                              if(valueText <= hiraList.length && valueText > 0) {
-                                setState(() {
-                                  inputIsValid = true;
-                                });
-                              }else {
-                                setState(() {
-                                  inputIsValid = false;
-                                  this.errorText = ' Valeur invalide: pas dans la plage 0..${hiraList.length+1}';
-                                });
-                              }
-                            }
-
-                            if(inputIsValid == true) {
-                              await Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => HiraViewPage(
-                                      title: hiraList[valueText-1].title,
-                                      hiraList: hiraList,
-                                    )
-                                )
-                              );
-                              setState(() {
-                                this.errorText = '';
-                              });
-                              
-                            }
-                            
-                        }, 
-                      )
-                    ],
-                  )
-                ],
-              ),
-            );
-        });
-  }
-
-  _showMaterialSearchForNumer(BuildContext context) {
-    Navigator.of(context)
-        .push(_buildMaterialSearchForNumberPage(context)).then((_){
-          setState(() {
-            reloadSettings();
-            this.errorText = '';
-          });
-        });
-  }
-
   
 
   void _searchgoToHiraViewPage(BuildContext context, value) async {
     // start the SecondScreen and wait for it to finish with a result
+    pigLatin(String value) => value.replaceAllMapped(
+        RegExp(r"[0-9]*", multiLine: true),
+        (Match m) => "${''}");
+    print(pigLatin(value));
+    
     await Navigator.push(
         context,
         MaterialPageRoute(
             builder: (context) => HiraViewPage(
-                  title: value,
+                  title: pigLatin(value),
                   hiraList: hiraList,
                 )));
     // after the SecondScreen result comes back update the Text widget with it
@@ -561,7 +452,7 @@ class HomePageState extends State<HomePage> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     final double width = MediaQuery.of(context).size.width;
-    // final double height = MediaQuery.of(context).size.height;
+    final double height = MediaQuery.of(context).size.height;
     final drawerHeader = Center(
       child: Stack(
         children: <Widget>[
@@ -835,6 +726,7 @@ class HomePageState extends State<HomePage> with TickerProviderStateMixin {
           body: DefaultTabController(
             length: lengthOfTab,
             child: NestedScrollView(
+              controller: _scrollcontroller,
               headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
                 return <Widget>[
                   SliverAppBar(
@@ -904,88 +796,178 @@ class HomePageState extends State<HomePage> with TickerProviderStateMixin {
                           }
                         },
                       ),
-                      PopupMenuButton<String>(
-                        icon: const Icon(Icons.search),
+                      _searchIsHidden == true 
+                      ? IconButton(
                         tooltip: 'Rechercher',
-                        onSelected: (String newValue) {
-                          _btnSelectedVal = newValue;
-                          if(_btnSelectedVal == 'Rechercher par titre') {
-                            _showMaterialSearch(context);
-                            reloadSettings();
-                          }else {
-                            _showMaterialSearchForNumer(context);
-                            reloadSettings();
-                          }
+                        icon: Icon(Icons.search,),
+                        onPressed: () {
+                          _showMaterialSearch(context);
+                          reloadSettings();
                         },
-                        itemBuilder: (BuildContext context) => _popUpMenuItems,
-                      ),
+                      )
+                      : Container(),
+                      
                     ],
-                    expandedHeight: 200.0,
+                    expandedHeight: 230.0,
                     flexibleSpace: FlexibleSpaceBar(
+                        titlePadding: EdgeInsetsDirectional.only(start: 72, bottom: 14),
                         collapseMode: CollapseMode.pin,
-                        title: Text("ADD Fihirana"),
-                        background: ClipPath(
-                          clipper: WaveClipperOne(),
-                          child: Stack(
-                            alignment: AlignmentDirectional.center,
-                            children: <Widget>[
-                              Container(
-                                width: MediaQuery.of(context).size.width,
-                                height: MediaQuery.of(context).size.height,
-                                color: modeSombre == 1
-                                ? 
-                                  Colors.black
-                                
-                                : 
-                                  Theme.of(context).primaryColorDark
-                                
+                        title: AnimatedBuilder(
+                          animation: _animController2, 
+                          builder: (BuildContext context, Widget child) {
+                            return Transform(
+                              transform: Matrix4.translationValues(0.0, animationTitleBar.value*height, 0.0),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: <Widget>[
+                                  Container(
+                                    width: 30,
+                                    margin: EdgeInsets.only(right: 5.0, top: 0.0, left: 0.0, bottom: 0.0),
+                                    child: Image.asset('assets/images/logoaddf.png'),
+                                  ),
+                                  Text('ADD Fihirana')
+                                ],
                               ),
-                              Container(
-                                width: width*0.9,
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: <Widget>[
-                                    Transform(
-                                      transform: Matrix4.translationValues(animation1.value*width, 0.0, 0.0),
-                                      child: Align(
-                                        alignment: Alignment.center,
-                                        child: Image.asset('assets/images/logoaddf.png', width: width*0.3/2,),
-                                      ),
-                                    ),
-                                    Transform(
-                                      transform: Matrix4.translationValues(animation2.value * width, 0.0, 0.0),
-                                      child: Align(
-                                        heightFactor: 2,
-                                        alignment: Alignment.centerLeft,
-                                        child: Text('« Hihira ho an’i Jehovah aho raha mbola velona koa »', 
-                                          style: TextStyle(
-                                            fontStyle: FontStyle.italic,
-                                            backgroundColor: Colors.black12,
-                                            fontWeight: FontWeight.bold,
-                                            color: Theme.of(context).primaryTextTheme.title.color
-                                          )
-                                        ),
-                                      )
-                                    ),
-                                    Transform(
-                                      transform: Matrix4.translationValues(0, animation3.value * width, 0.0),
-                                      child: Align(
-                                        heightFactor: 1,
-                                        alignment: Alignment.centerRight,
-                                        child: Text('Sal. 104:33a', 
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontStyle: FontStyle.italic,
-                                            color: Theme.of(context).primaryTextTheme.title.color
+                            );
+                          },
+                        ),
+                        
+                        background: Stack(
+                          alignment: Alignment.bottomCenter,
+                          children: <Widget>[
+                            ClipPath(
+                              clipper: WaveClipperOne(),
+                              child: Stack(
+                                alignment: AlignmentDirectional.topCenter,
+                                children: <Widget>[
+                                  Container(
+                                    color: Theme.of(context).primaryColorDark,
+                                    padding: EdgeInsets.only(top: 50, right: 20, left: 20),
+                                    child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      children: <Widget>[
+                                        Transform(
+                                          transform: Matrix4.translationValues(animation1.value*width, 0.0, 0.0),
+                                          child: Align(
+                                            alignment: Alignment.center,
+                                            child: Image.asset('assets/images/logoaddf.png', width: 45),
                                           ),
+                                        ),
+                                        Transform(
+                                          transform: Matrix4.translationValues(animation2.value*width, 0.0, 0.0),
+                                          child: Align(
+                                            alignment: Alignment.center,
+                                            child: Padding(
+                                              padding: EdgeInsets.only(top: 5, bottom: 5),
+                                              child: Text('ADD Fihirana', style: TextStyle(color: Theme.of(context).primaryTextTheme.title.color, fontSize: 17)),
+                                            )
+                                          ),
+                                        ),
+                                        randomBool 
+                                        ? Column(
+                                          children: <Widget>[
+                                            Transform(
+                                              transform: Matrix4.translationValues(animation3.value * width, 0.0, 0.0),
+                                              child: Align(
+                                                heightFactor: 2,
+                                                alignment: Alignment.centerLeft,
+                                                child: Text('« Hihira ho an’i Jehovah aho raha mbola velona koa »', 
+                                                  style: TextStyle(
+                                                    fontStyle: FontStyle.italic,
+                                                    backgroundColor: Colors.black12,
+                                                    fontWeight: FontWeight.bold,
+                                                    color: Theme.of(context).primaryTextTheme.title.color
+                                                  )
+                                                ),
+                                              )
+                                            ),
+                                            Transform(
+                                              transform: Matrix4.translationValues(0, animation4.value * width, 0.0),
+                                              child: Align(
+                                                heightFactor: 1,
+                                                alignment: Alignment.centerRight,
+                                                child: Text('Sal. 104:33a', 
+                                                  style: TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                    fontStyle: FontStyle.italic,
+                                                    color: Theme.of(context).primaryTextTheme.title.color
+                                                  ),
+                                                )
+                                              ),
+                                            )
+                                          ],
                                         )
-                                      ),
-                                    )
-                                  ],
-                                ),
+                                        : Column(
+                                          children: <Widget>[
+                                            Transform(
+                                              transform: Matrix4.translationValues(animation3.value * width, 0.0, 0.0),
+                                              child: Align(
+                                                heightFactor: 2,
+                                                alignment: Alignment.centerLeft,
+                                                child: Text('« Mihirà ho Azy, mankalazà Azy »', 
+                                                  style: TextStyle(
+                                                    fontStyle: FontStyle.italic,
+                                                    backgroundColor: Colors.black12,
+                                                    fontWeight: FontWeight.bold,
+                                                    color: Theme.of(context).primaryTextTheme.title.color
+                                                  )
+                                                ),
+                                              )
+                                            ),
+                                            Transform(
+                                              transform: Matrix4.translationValues(0, animation4.value * width, 0.0),
+                                              child: Align(
+                                                heightFactor: 1,
+                                                alignment: Alignment.centerRight,
+                                                child: Text('Sal. 105:2a', 
+                                                  style: TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                    fontStyle: FontStyle.italic,
+                                                    color: Theme.of(context).primaryTextTheme.title.color
+                                                  ),
+                                                )
+                                              ),
+                                            )
+                                          ],
+                                        ),
+                                      
+                                      ],
+                                    ),
+                                  ),
+                                ],
                               ),
-                            ],
-                          )
+                                  
+                            ),
+                            Padding(
+                              padding: EdgeInsets.only(top: 0, bottom: 10, right: 10, left: 10),
+                              child: Card(
+                                color: Theme.of(context).primaryColorDark,
+                                elevation: 8,
+                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+                                child: Container(
+                                  margin: EdgeInsets.all(2),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.all(Radius.circular(30)),
+                                    color: Colors.white,
+                                  ),
+                                  child: TextField(
+                                    readOnly: true,
+                                    decoration: InputDecoration(
+                                      contentPadding: EdgeInsets.all(15),
+                                      prefixIcon: Icon(Icons.search, color: Theme.of(context).primaryColor,),
+                                      border: InputBorder.none,
+                                      hintText: 'Rechercher',
+                                    ),
+                                    onTap: () {
+                                      _showMaterialSearch(context);
+                                      reloadSettings();
+                                    },
+                                  ),
+                                ),
+                              )
+                              
+                            ),
+                          ],
                         )
                         
                       ),
@@ -997,7 +979,6 @@ class HomePageState extends State<HomePage> with TickerProviderStateMixin {
                         labelStyle: TextStyle(fontSize: 20.0),
                         unselectedLabelStyle: TextStyle(
                           fontSize: 20.0,
-                          color: Colors.white70,
                         ),
                         indicatorColor: Colors.white,
                         indicatorPadding: EdgeInsets.all(8.0),
@@ -1060,7 +1041,9 @@ class _SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
     return new Container(
         color: Theme.of(context).primaryColor,
         child: Stack(
-          children: <Widget>[_tabBar],
+          children: <Widget>[
+            _tabBar
+          ],
         ));
   }
 
