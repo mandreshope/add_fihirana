@@ -542,6 +542,13 @@ class _HiraViewPageState extends State<HiraViewPage> with SingleTickerProviderSt
       headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
         return <Widget> [
           SliverAppBar(
+            leading: IconButton(
+              tooltip: 'Retour',
+              icon: Icon(Icons.arrow_back),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
             pinned: true,
             title: Row(
               mainAxisAlignment: MainAxisAlignment.start,
@@ -561,6 +568,7 @@ class _HiraViewPageState extends State<HiraViewPage> with SingleTickerProviderSt
             ),
             actions: <Widget>[
               PopupMenuButton<int>(
+                tooltip: 'Menu',
                 onSelected: (int newValue) {
                   _btnSelectedVal = newValue;
                   if(_btnSelectedVal == 1) {
@@ -612,8 +620,8 @@ class _HiraViewPageState extends State<HiraViewPage> with SingleTickerProviderSt
                   padding: EdgeInsets.all(5),
                   child: CircleAvatar(
                       radius: this._offset/3,
-                      backgroundColor: Theme.of(context).primaryColorDark,
-                      child: Text('$carouselIndex', style: TextStyle(fontSize: this._offset/4),)
+                      backgroundColor: Theme.of(context).primaryColor,
+                      child: Text('$carouselIndex', style: TextStyle(fontSize: this._offset/4, color: Colors.white),)
                   ),
                 ),
               ),

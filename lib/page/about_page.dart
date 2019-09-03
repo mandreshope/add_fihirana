@@ -121,6 +121,13 @@ class _AboutPageState extends State<AboutPage>  with SingleTickerProviderStateMi
         return Scaffold(
           backgroundColor: modeSombre == 1 ? Colors.black : Theme.of(context).scaffoldBackgroundColor,
           appBar: AppBar(
+            leading: IconButton(
+              tooltip: 'Retour',
+              icon: Icon(Icons.arrow_back),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
             title: Text("A propos"),
           ),
           body: 

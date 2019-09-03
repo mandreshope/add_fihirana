@@ -105,6 +105,7 @@ class _FavorisPageState extends State<FavorisPage> {
       itemCount: favoris2.length,
       itemBuilder: (BuildContext context, int index) {
         return Card(
+          elevation: 0,
           child: GestureDetector(
             child: ListTile(
               // key: Key(favoris2[index].id.toString()),
@@ -116,6 +117,7 @@ class _FavorisPageState extends State<FavorisPage> {
                 child: Text(favoris2[index].title.substring(0, 1))
               )
               :CircleAvatar(
+                backgroundColor: Theme.of(context).primaryColorLight,
                 child: Icon(Icons.check)
               ),
               title: Text(favoris2[index].title),
@@ -182,6 +184,13 @@ class _FavorisPageState extends State<FavorisPage> {
     return new Scaffold(
       backgroundColor: modeSombre == 1 ? Colors.black : Theme.of(context).scaffoldBackgroundColor,
       appBar: new AppBar(
+        leading: IconButton(
+          tooltip: 'Retour',
+          icon: Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+        ),
         title: new Text("Favoris"),
         actions: increment <=0 
           ? 

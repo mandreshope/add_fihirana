@@ -105,6 +105,7 @@ class _HistoryPageState extends State<HistoryPage> {
       itemCount: history.length,
       itemBuilder: (BuildContext context, int index) {
         return Card(
+          elevation: 0,
           child: GestureDetector(
             child: ListTile(
               leading: history[index].check == false 
@@ -112,6 +113,7 @@ class _HistoryPageState extends State<HistoryPage> {
                   child: Text(history[index].title.substring(0, 1))
                 )
                 :CircleAvatar(
+                  backgroundColor: Theme.of(context).primaryColorLight,
                   child: Icon(Icons.check)
                 ),
               title: Text(history[index].title),
@@ -168,6 +170,13 @@ class _HistoryPageState extends State<HistoryPage> {
     return new Scaffold(
       backgroundColor: modeSombre == 1 ? Colors.black : Theme.of(context).scaffoldBackgroundColor,
       appBar: new AppBar(
+        leading: IconButton(
+          tooltip: 'Retour',
+          icon: Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+        ),
         title: new Text("Historiques"),
         actions: increment <=0 
           ? 

@@ -64,7 +64,7 @@ class HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
   AnimationController _animController;
   AnimationController _animController2;
-  Animation<double> animation1, animation2, animation3, animation4, animationTitleBar;
+  Animation<double> animation1, animation2, animation3, animationTitleBar;
   _AnimationStatus animationStatus = _AnimationStatus.end;
 
   bool inputIsValid = true;
@@ -245,33 +245,27 @@ class HomePageState extends State<HomePage> with TickerProviderStateMixin {
       ),
     );
 
-    animation1 = Tween(begin: 1.0, end: 0.0).animate(
+    animation1 = Tween(begin: 0.0, end: 1.0).animate(
       new CurvedAnimation(
           parent: _animController,
-          curve:  Curves.fastOutSlowIn,
+          curve:  Curves.linear,
       ),
     );
 
-    animation2 = Tween(begin: -1.0, end: 0.0).animate(
+    animation2 = Tween(begin: 0.0, end: 1.0).animate(
       new CurvedAnimation(
           parent: _animController,
-          curve: Interval(0.5, 1.0, curve: Curves.fastOutSlowIn), 
+          curve: Interval(0.7, 1.0, curve: Curves.linear), 
       ),
     );
 
     animation3 = Tween(begin: 1.0, end: 0.0).animate(
       new CurvedAnimation(
           parent: _animController,
-          curve: Interval(0.7, 1.0, curve: Curves.fastOutSlowIn), 
+          curve: Interval(1.0, 1.0, curve: Curves.fastOutSlowIn), 
       ),
     );
 
-    animation4 = Tween(begin: 1.0, end: 0.0).animate(
-      new CurvedAnimation(
-          parent: _animController,
-          curve: Interval(0.9, 1.0, curve: Curves.fastOutSlowIn), 
-      ),
-    );
 
   }
 
@@ -366,7 +360,7 @@ class HomePageState extends State<HomePage> with TickerProviderStateMixin {
                   ? ThemeData.dark().backgroundColor
                   : Colors.white,
               iconColor: modeSombre == 1 ? Colors.white : Colors.black,
-              placeholder: 'Tapez le titre ou le numéro...',
+              placeholder: 'Saisisser un titre ou un numéro...',
               results: hiraList
                   .map((Hira v) => new MaterialSearchResult<String>(
                         icon: Icons.queue_music,
@@ -463,91 +457,48 @@ class HomePageState extends State<HomePage> with TickerProviderStateMixin {
               height: 220.0,
               color: Theme.of(context).primaryColor,
               child: Center(
-                child: modeSombre == 1
-                    ? Container(
-                      width: MediaQuery.of(context).size.width,
-                      height: 150,
-                      decoration: BoxDecoration(
-                        image: DecorationImage(
-                          fit: BoxFit.cover,
-                          image: AssetImage('assets/images/music_clip.png'),
-                          alignment: Alignment.topLeft,
-                        ),
+                child:  Container(
+                  width: width,
+                  height: 150,
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      fit: BoxFit.cover,
+                      image: AssetImage('assets/images/music_clip.png'),
+                      alignment: Alignment.topLeft,
+                    ),
+                  ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: <Widget>[
+                      Image.asset(
+                        'assets/images/logoaddf.png',
+                        fit: BoxFit.fill,
+                        width: 50.0,
+                        height: 50.0,
                       ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: <Widget>[
-                          Image.asset(
-                            'assets/images/logoaddf.png',
-                            fit: BoxFit.fill,
-                            width: 50.0,
-                            height: 50.0,
-                          ),
-                          Divider(
-                            color: Colors.transparent,
-                            height: 5,
-                          ),
-                          Text('ADD FIHIRANA', style: TextStyle(
-                              color: Theme.of(context).primaryTextTheme.title.color,
-                              fontSize: 18,
-                              fontFamily: 'Montserrat',
-                              fontWeight: FontWeight.bold
-                            ),),
-                          Divider(
-                            color: Colors.transparent,
-                          ),
-                          Text('FIHIRANA ASSEMBLEE DE DIEU MADAGASCAR', style: TextStyle(
-                              color: Theme.of(context).primaryTextTheme.title.color,
-                              fontSize: 12,
-                              fontWeight: FontWeight.bold
-                            ),),
-                        
-                        ],
+                      Divider(
+                        color: Colors.transparent,
+                        height: 5,
                       ),
-                    )
-                    : Container(
-                      width: width,
-                      height: 150,
-                      decoration: BoxDecoration(
-                        image: DecorationImage(
-                          fit: BoxFit.cover,
-                          image: AssetImage('assets/images/music_clip.png'),
-                          alignment: Alignment.topLeft,
-                        ),
+                      
+                      Text('ADD FIHIRANA', style: TextStyle(
+                          color: Theme.of(context).primaryTextTheme.title.color,
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold
+                        ),),
+                      Divider(
+                        color: Colors.transparent,
                       ),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: <Widget>[
-                          Image.asset(
-                            'assets/images/logoaddf.png',
-                            fit: BoxFit.fill,
-                            width: 50.0,
-                            height: 50.0,
-                          ),
-                          Divider(
-                            color: Colors.transparent,
-                            height: 5,
-                          ),
-                          
-                          Text('ADD FIHIRANA', style: TextStyle(
-                              color: Theme.of(context).primaryTextTheme.title.color,
-                              fontSize: 18,
-                              fontFamily: 'Montserrat',
-                              fontWeight: FontWeight.bold
-                            ),),
-                          Divider(
-                            color: Colors.transparent,
-                          ),
-                          Text('FIHIRANA ASSEMBLEE DE DIEU MADAGASCAR', style: TextStyle(
-                              color: Theme.of(context).primaryTextTheme.title.color,
-                              fontSize: 12,
-                              fontWeight: FontWeight.bold
-                            ),),
-                        
-                        ],
-                      ),
-                    )
+                      Text('FIHIRANA ASSEMBLEE DE DIEU MADAGASCAR', style: TextStyle(
+                          color: Theme.of(context).primaryTextTheme.title.color,
+                          fontSize: 12,
+                          fontWeight: FontWeight.bold
+                        ),),
+                    
+                    ],
+                  ),
+                )
               ),
             ),
           ),
@@ -871,39 +822,74 @@ class HomePageState extends State<HomePage> with TickerProviderStateMixin {
                                           Align(
                                             heightFactor: 0,
                                             alignment: Alignment.center,
-                                            child: Text('“', 
-                                              style: TextStyle(
-                                                fontSize: 35,
-                                                fontFamily: 'Montserrat',
-                                                fontWeight: FontWeight.bold,
-                                                color: modeSombre == 1 ? Colors.white : Theme.of(context).primaryColor
-                                              )
-                                            ),
+                                            child: AnimatedOpacity(
+                                              child: Text('“', 
+                                                style: TextStyle(
+                                                  fontSize: 35,
+                                                  fontFamily: 'Montserrat',
+                                                  fontWeight: FontWeight.bold,
+                                                  color: modeSombre == 1 ? Colors.white : Theme.of(context).primaryColorDark
+                                                )
+                                              ),
+                                              duration: Duration(seconds: 2),
+                                              opacity: 1-animation1.value.abs()
+                                            )
                                           ),
                                           Align(
                                             heightFactor: 1.5,
                                             alignment: Alignment.center,
-                                            child: Text('Hihira ho an’i Jehovah aho raha mbola velona koa', 
-                                              textAlign: TextAlign.center,
-                                              style: TextStyle(
-                                                fontWeight: FontWeight.normal,
-                                                fontSize: 15,
-                                                fontFamily: 'Montserrat',
-                                                color: modeSombre == 1 ? Colors.white : Theme.of(context).primaryColor
+                                            child: AnimatedOpacity(
+                                              duration: Duration(seconds: 2),
+                                              child: randomBool == true 
+                                              ?
+                                              Text('Hihira ho an’i Jehovah aho raha mbola velona koa', 
+                                                textAlign: TextAlign.center,
+                                                style: TextStyle(
+                                                  fontWeight: FontWeight.normal,
+                                                  fontSize: 15,
+                                                  fontFamily: 'Montserrat',
+                                                  color: modeSombre == 1 ? Colors.white : Theme.of(context).primaryColorDark,
+                                                )
                                               )
-                                            ),
-                                          ),
-                                          Align(
-                                            heightFactor: 0.5,
-                                            alignment: Alignment.centerRight,
-                                            child: Text('Sal. 105:2a', 
-                                              style: TextStyle(
-                                                fontStyle: FontStyle.italic,
-                                                fontFamily: 'Montserrat',
-                                                color: modeSombre == 1 ? Colors.white : Theme.of(context).primaryColor
+                                              :
+                                               Text('Mihirà ho Azy, mankalazà Azy', 
+                                                textAlign: TextAlign.center,
+                                                style: TextStyle(
+                                                  fontWeight: FontWeight.normal,
+                                                  fontSize: 15,
+                                                  fontFamily: 'Montserrat',
+                                                  color: modeSombre == 1 ? Colors.white : Theme.of(context).primaryColorDark,
+                                                )
                                               ),
+                                              opacity: 1-animation2.value.abs()
                                             )
                                           ),
+                                          Transform(
+                                            transform: Matrix4.translationValues(0.0, animation3.value*height, 0.0),
+                                            child: Align(
+                                              heightFactor: 0.5,
+                                              alignment: Alignment.centerRight,
+                                              child: randomBool == true
+                                              ?
+                                              Text('Sal. 104:33a', 
+                                                style: TextStyle(
+                                                  fontStyle: FontStyle.italic,
+                                                  fontSize: 12,
+                                                  fontFamily: 'Montserrat',
+                                                  color: modeSombre == 1 ? Colors.white : Theme.of(context).primaryColorDark
+                                                )
+                                              )
+                                              :
+                                              Text('Sal. 105:2a', 
+                                                style: TextStyle(
+                                                  fontStyle: FontStyle.italic,
+                                                  fontSize: 12,
+                                                  fontFamily: 'Montserrat',
+                                                  color: modeSombre == 1 ? Colors.white : Theme.of(context).primaryColorDark
+                                                )
+                                              )
+                                            ),
+                                          )
                                         ],
                                       ),
                                     ],
@@ -927,7 +913,7 @@ class HomePageState extends State<HomePage> with TickerProviderStateMixin {
                                     readOnly: true,
                                     decoration: InputDecoration(
                                       contentPadding: EdgeInsets.all(15),
-                                      prefixIcon: Icon(Icons.search, color: Colors.grey[600],),
+                                      prefixIcon: Icon(Icons.search, color: modeSombre == 0 ? Theme.of(context).primaryColorDark: Colors.white,),
                                       border: InputBorder.none,
                                       hintText: 'Rechercher',
                                     ),

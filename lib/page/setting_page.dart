@@ -390,6 +390,13 @@ class _SettingPageState extends State<SettingPage> {
     return new Scaffold(
       backgroundColor: _modeSombre == 1 ? Colors.black : Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
+        leading: IconButton(
+          tooltip: 'Retour',
+          icon: Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+        ),
         title: Text('Paramètres'),
       ),
       body: responsive,
