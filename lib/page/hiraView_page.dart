@@ -551,7 +551,12 @@ class _HiraViewPageState extends State<HiraViewPage> with SingleTickerProviderSt
                   margin: EdgeInsets.only(right: 5.0, top: 0.0, left: 0.0, bottom: 0.0),
                   child: Image.asset('assets/images/logoaddf.png'),
                 ),
-                Text('ADD Fihirana')
+                Container(
+                    width: MediaQuery.of(context).size.width*0.45,
+                    child: Text('ADD Fihirana', 
+                    overflow: TextOverflow.ellipsis,
+                  )
+                )
               ],
             ),
             actions: <Widget>[

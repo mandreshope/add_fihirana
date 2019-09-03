@@ -289,6 +289,7 @@ class HomePageState extends State<HomePage> with TickerProviderStateMixin {
       itemCount: hiraList2.length,
       itemBuilder: (BuildContext context, int index) {
         return Card(
+          elevation: 0,
           child: ListTile(
             onTap: () {
               _goToHiraViewPage(context, hiraList2[index].id);
@@ -489,6 +490,7 @@ class HomePageState extends State<HomePage> with TickerProviderStateMixin {
                           Text('ADD FIHIRANA', style: TextStyle(
                               color: Theme.of(context).primaryTextTheme.title.color,
                               fontSize: 18,
+                              fontFamily: 'Montserrat',
                               fontWeight: FontWeight.bold
                             ),),
                           Divider(
@@ -531,6 +533,7 @@ class HomePageState extends State<HomePage> with TickerProviderStateMixin {
                           Text('ADD FIHIRANA', style: TextStyle(
                               color: Theme.of(context).primaryTextTheme.title.color,
                               fontSize: 18,
+                              fontFamily: 'Montserrat',
                               fontWeight: FontWeight.bold
                             ),),
                           Divider(
@@ -811,12 +814,12 @@ class HomePageState extends State<HomePage> with TickerProviderStateMixin {
                     expandedHeight: 230.0,
                     flexibleSpace: FlexibleSpaceBar(
                         titlePadding: EdgeInsetsDirectional.only(start: 72, bottom: 14),
-                        collapseMode: CollapseMode.pin,
+                        collapseMode: CollapseMode.none,
                         title: AnimatedBuilder(
                           animation: _animController2, 
                           builder: (BuildContext context, Widget child) {
                             return Transform(
-                              transform: Matrix4.translationValues(0.0, animationTitleBar.value*height, 0.0),
+                              transform: Matrix4.translationValues(0.0, animationTitleBar.value*(height*0.2), 0.0),
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 children: <Widget>[
@@ -825,7 +828,12 @@ class HomePageState extends State<HomePage> with TickerProviderStateMixin {
                                     margin: EdgeInsets.only(right: 5.0, top: 0.0, left: 0.0, bottom: 0.0),
                                     child: Image.asset('assets/images/logoaddf.png'),
                                   ),
-                                  Text('ADD Fihirana')
+                                  Container(
+                                      width: width*0.45,
+                                      child: Text('ADD Fihirana', 
+                                      overflow: TextOverflow.ellipsis,
+                                    )
+                                  )
                                 ],
                               ),
                             );
@@ -843,101 +851,66 @@ class HomePageState extends State<HomePage> with TickerProviderStateMixin {
                                   Container(
                                     color: Theme.of(context).primaryColorDark,
                                     padding: EdgeInsets.only(top: 50, right: 20, left: 20),
-                                    child: Column(
-                                      mainAxisAlignment: MainAxisAlignment.start,
-                                      children: <Widget>[
-                                        Transform(
-                                          transform: Matrix4.translationValues(animation1.value*width, 0.0, 0.0),
-                                          child: Align(
-                                            alignment: Alignment.center,
-                                            child: Image.asset('assets/images/logoaddf.png', width: 45),
-                                          ),
-                                        ),
-                                        Transform(
-                                          transform: Matrix4.translationValues(animation2.value*width, 0.0, 0.0),
-                                          child: Align(
-                                            alignment: Alignment.center,
-                                            child: Padding(
-                                              padding: EdgeInsets.only(top: 5, bottom: 5),
-                                              child: Text('ADD Fihirana', style: TextStyle(color: Theme.of(context).primaryTextTheme.title.color, fontSize: 17)),
-                                            )
-                                          ),
-                                        ),
-                                        randomBool 
-                                        ? Column(
-                                          children: <Widget>[
-                                            Transform(
-                                              transform: Matrix4.translationValues(animation3.value * width, 0.0, 0.0),
-                                              child: Align(
-                                                heightFactor: 2,
-                                                alignment: Alignment.centerLeft,
-                                                child: Text('« Hihira ho an’i Jehovah aho raha mbola velona koa »', 
-                                                  style: TextStyle(
-                                                    fontStyle: FontStyle.italic,
-                                                    backgroundColor: Colors.black12,
-                                                    fontWeight: FontWeight.bold,
-                                                    color: Theme.of(context).primaryTextTheme.title.color
-                                                  )
-                                                ),
-                                              )
-                                            ),
-                                            Transform(
-                                              transform: Matrix4.translationValues(0, animation4.value * width, 0.0),
-                                              child: Align(
-                                                heightFactor: 1,
-                                                alignment: Alignment.centerRight,
-                                                child: Text('Sal. 104:33a', 
-                                                  style: TextStyle(
-                                                    fontWeight: FontWeight.bold,
-                                                    fontStyle: FontStyle.italic,
-                                                    color: Theme.of(context).primaryTextTheme.title.color
-                                                  ),
-                                                )
-                                              ),
-                                            )
-                                          ],
-                                        )
-                                        : Column(
-                                          children: <Widget>[
-                                            Transform(
-                                              transform: Matrix4.translationValues(animation3.value * width, 0.0, 0.0),
-                                              child: Align(
-                                                heightFactor: 2,
-                                                alignment: Alignment.centerLeft,
-                                                child: Text('« Mihirà ho Azy, mankalazà Azy »', 
-                                                  style: TextStyle(
-                                                    fontStyle: FontStyle.italic,
-                                                    backgroundColor: Colors.black12,
-                                                    fontWeight: FontWeight.bold,
-                                                    color: Theme.of(context).primaryTextTheme.title.color
-                                                  )
-                                                ),
-                                              )
-                                            ),
-                                            Transform(
-                                              transform: Matrix4.translationValues(0, animation4.value * width, 0.0),
-                                              child: Align(
-                                                heightFactor: 1,
-                                                alignment: Alignment.centerRight,
-                                                child: Text('Sal. 105:2a', 
-                                                  style: TextStyle(
-                                                    fontWeight: FontWeight.bold,
-                                                    fontStyle: FontStyle.italic,
-                                                    color: Theme.of(context).primaryTextTheme.title.color
-                                                  ),
-                                                )
-                                              ),
-                                            )
-                                          ],
-                                        ),
-                                      
-                                      ],
-                                    ),
                                   ),
                                 ],
                               ),
                                   
                             ),
+                            Padding(
+                              padding: EdgeInsets.only(top: 70, bottom: 45, right: 12, left: 12),
+                              child: Card(
+                                elevation: 10,
+                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(30))),
+                                child: Container(
+                                  margin: EdgeInsets.only(top: 45, bottom: 10, right: 10, left: 10),
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: <Widget>[
+                                      Column(
+                                        children: <Widget>[
+                                          Align(
+                                            heightFactor: 0,
+                                            alignment: Alignment.center,
+                                            child: Text('“', 
+                                              style: TextStyle(
+                                                fontSize: 35,
+                                                fontFamily: 'Montserrat',
+                                                fontWeight: FontWeight.bold,
+                                                color: modeSombre == 1 ? Colors.white : Theme.of(context).primaryColor
+                                              )
+                                            ),
+                                          ),
+                                          Align(
+                                            heightFactor: 1.5,
+                                            alignment: Alignment.center,
+                                            child: Text('Hihira ho an’i Jehovah aho raha mbola velona koa', 
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.normal,
+                                                fontSize: 15,
+                                                fontFamily: 'Montserrat',
+                                                color: modeSombre == 1 ? Colors.white : Theme.of(context).primaryColor
+                                              )
+                                            ),
+                                          ),
+                                          Align(
+                                            heightFactor: 0.5,
+                                            alignment: Alignment.centerRight,
+                                            child: Text('Sal. 105:2a', 
+                                              style: TextStyle(
+                                                fontStyle: FontStyle.italic,
+                                                fontFamily: 'Montserrat',
+                                                color: modeSombre == 1 ? Colors.white : Theme.of(context).primaryColor
+                                              ),
+                                            )
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ), 
                             Padding(
                               padding: EdgeInsets.only(top: 0, bottom: 10, right: 10, left: 10),
                               child: Card(
@@ -967,12 +940,26 @@ class HomePageState extends State<HomePage> with TickerProviderStateMixin {
                               )
                               
                             ),
+                            Container(
+                              width: 45,
+                              height: 45,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: Theme.of(context).primaryColorDark,
+                              ),
+                              margin: EdgeInsets.only(top: 0,bottom: 158, right: 12, left: 12),
+                              child: Align(
+                                alignment: Alignment.center,
+                                child: Image.asset('assets/images/logoaddf.png', width: 45),
+                              ),
+                            ),
                           ],
                         )
                         
                       ),
                   ),
                   SliverPersistentHeader(
+                    pinned: true,
                     delegate: _SliverAppBarDelegate(
                       TabBar(
                         isScrollable: true,
@@ -980,9 +967,9 @@ class HomePageState extends State<HomePage> with TickerProviderStateMixin {
                         unselectedLabelStyle: TextStyle(
                           fontSize: 20.0,
                         ),
-                        indicatorColor: Colors.white,
+                        indicatorColor: Theme.of(context).primaryTextTheme.title.color,
                         indicatorPadding: EdgeInsets.all(8.0),
-                        labelColor: Colors.white,
+                        labelColor: Theme.of(context).primaryTextTheme.title.color,
                         indicatorSize: TabBarIndicatorSize.label,
                         tabs: [
                           Tab(text: "Sokajy hafa"),
@@ -1004,7 +991,6 @@ class HomePageState extends State<HomePage> with TickerProviderStateMixin {
                         ],
                       )
                     ),
-                    pinned: true,
                   ),
                 ];
               },
