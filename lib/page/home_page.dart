@@ -360,7 +360,7 @@ class HomePageState extends State<HomePage> with TickerProviderStateMixin {
                   ? ThemeData.dark().backgroundColor
                   : Colors.white,
               iconColor: modeSombre == 1 ? Colors.white : Colors.black,
-              placeholder: 'Saisisser un titre ou un numéro...',
+              placeholder: 'Saisissez un titre ou un numéro',
               results: hiraList
                   .map((Hira v) => new MaterialSearchResult<String>(
                         icon: Icons.queue_music,
