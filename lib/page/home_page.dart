@@ -234,7 +234,7 @@ class HomePageState extends State<HomePage> with TickerProviderStateMixin {
 	  );
 
     _animController2 = new AnimationController(
-      duration: const Duration(milliseconds: 400),
+      duration: const Duration(milliseconds: 500),
       vsync: this,
 	  );
 
@@ -245,24 +245,24 @@ class HomePageState extends State<HomePage> with TickerProviderStateMixin {
       ),
     );
 
-    animation1 = Tween(begin: 0.0, end: 1.0).animate(
+    animation1 = Tween(begin: 1.0, end: 0.0).animate(
       new CurvedAnimation(
           parent: _animController,
           curve:  Curves.linear,
       ),
     );
 
-    animation2 = Tween(begin: 0.0, end: 1.0).animate(
+    animation2 = Tween(begin: 1.0, end: 1.0).animate(
       new CurvedAnimation(
           parent: _animController,
-          curve: Interval(0.7, 1.0, curve: Curves.linear), 
+          curve: Interval(0.5, 1.0, curve: Curves.linear),
       ),
     );
 
     animation3 = Tween(begin: 1.0, end: 0.0).animate(
       new CurvedAnimation(
           parent: _animController,
-          curve: Interval(1.0, 1.0, curve: Curves.fastOutSlowIn), 
+          curve: Interval(7.0, 1.0, curve: Curves.fastOutSlowIn),
       ),
     );
 
@@ -364,8 +364,8 @@ class HomePageState extends State<HomePage> with TickerProviderStateMixin {
               results: hiraList
                   .map((Hira v) => new MaterialSearchResult<String>(
                         icon: Icons.queue_music,
-                        value: '${v.id}${v.title}',
-                        text: "${v.id}. ${v.title}",
+                        value: '${v.id} ${v.title}',
+                        text: "${v.id} ${v.title}",
                       ))
                   .toList(),
               filter: (dynamic value, String criteria) {
@@ -392,7 +392,7 @@ class HomePageState extends State<HomePage> with TickerProviderStateMixin {
   void _searchgoToHiraViewPage(BuildContext context, value) async {
     // start the SecondScreen and wait for it to finish with a result
     pigLatin(String value) => value.replaceAllMapped(
-        RegExp(r"[0-9]*", multiLine: true),
+        RegExp(r"[0-9] *", multiLine: true),
         (Match m) => "${''}");
     print(pigLatin(value));
     
@@ -861,7 +861,7 @@ class HomePageState extends State<HomePage> with TickerProviderStateMixin {
                                                   color: modeSombre == 1 ? Colors.white : Theme.of(context).primaryColorDark,
                                                 )
                                               ),
-                                              opacity: 1-animation2.value.abs()
+                                              opacity: animation2.value.abs() - animation1.value.abs()
                                             )
                                           ),
                                           Transform(

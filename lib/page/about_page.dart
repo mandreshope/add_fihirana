@@ -15,7 +15,6 @@ class _AboutPageState extends State<AboutPage>  with SingleTickerProviderStateMi
 
   int modeSombre;
   var _db = DBHelper();
-  static DateTime _copyrightDate = new DateTime.now();
 
   Future<void> launched;
   // String _phone = '0330297426';
@@ -111,8 +110,6 @@ class _AboutPageState extends State<AboutPage>  with SingleTickerProviderStateMi
 
   @override
   Widget build(BuildContext context) {
-    DateTime copyrightDate = _copyrightDate;
-    int copyrightMonth = copyrightDate.year;
     final double width = MediaQuery.of(context).size.width;
     _animController.forward();
     return AnimatedBuilder(
@@ -252,7 +249,8 @@ class _AboutPageState extends State<AboutPage>  with SingleTickerProviderStateMi
                           color: modeSombre == 1 ? Theme.of(context).primaryColorLight : Theme.of(context).primaryColor,
                         ),
                         title: Text(
-                            'Assemblée de Dieu Madagascar $copyrightMonth'),
+                            'Assemblée de Dieu Madagascar'),
+                        subtitle: Text('04 Septembre 2019'),
                     ),
                     Divider(),
                   ],
