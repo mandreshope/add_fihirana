@@ -148,7 +148,7 @@ class _AboutPageState extends State<AboutPage>  with SingleTickerProviderStateMi
                           color: Theme.of(context).primaryColorLight,
                         ),
                     ),
-                    trailing: Text('v1.4.0(4)',
+                    trailing: Text('1.4.0(6)',
                       style: TextStyle(
                         color: Theme.of(context).primaryTextTheme.title.color,
                       ),

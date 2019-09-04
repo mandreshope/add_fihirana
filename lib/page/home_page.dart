@@ -64,7 +64,7 @@ class HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
   AnimationController _animController;
   AnimationController _animController2;
-  Animation<double> animation1, animation2, animation3, animationTitleBar;
+  Animation<double> animation1, animation3, animationTitleBar;
   _AnimationStatus animationStatus = _AnimationStatus.end;
 
   bool inputIsValid = true;
@@ -245,24 +245,17 @@ class HomePageState extends State<HomePage> with TickerProviderStateMixin {
       ),
     );
 
-    animation1 = Tween(begin: 1.0, end: 0.0).animate(
+    animation1 = Tween(begin: 0.0, end: 1.0).animate(
       new CurvedAnimation(
           parent: _animController,
-          curve:  Curves.linear,
-      ),
-    );
-
-    animation2 = Tween(begin: 1.0, end: 1.0).animate(
-      new CurvedAnimation(
-          parent: _animController,
-          curve: Interval(0.5, 1.0, curve: Curves.linear),
+          curve:  Curves.fastOutSlowIn
       ),
     );
 
     animation3 = Tween(begin: 1.0, end: 0.0).animate(
       new CurvedAnimation(
           parent: _animController,
-          curve: Interval(7.0, 1.0, curve: Curves.fastOutSlowIn),
+          curve:  Curves.fastOutSlowIn
       ),
     );
 
@@ -272,6 +265,7 @@ class HomePageState extends State<HomePage> with TickerProviderStateMixin {
   @override
 	void dispose(){
 	  _animController.dispose();
+    _animController2.dispose();
     _scrollcontroller.removeListener(_scrollListener);
     _scrollcontroller.dispose();
 	  super.dispose();
@@ -669,7 +663,6 @@ class HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
       hiraList.isEmpty ? noData : hiraListFanoloranjaza,
     ];  
-
     return AnimatedBuilder(
       animation: _animController, 
       builder: (BuildContext context, Widget child) {
@@ -832,7 +825,7 @@ class HomePageState extends State<HomePage> with TickerProviderStateMixin {
                                                 )
                                               ),
                                               duration: Duration(seconds: 2),
-                                              opacity: 1-animation1.value.abs()
+                                              opacity: animation1.value
                                             )
                                           ),
                                           Align(
@@ -861,33 +854,37 @@ class HomePageState extends State<HomePage> with TickerProviderStateMixin {
                                                   color: modeSombre == 1 ? Colors.white : Theme.of(context).primaryColorDark,
                                                 )
                                               ),
-                                              opacity: animation2.value.abs() - animation1.value.abs()
+                                              opacity: animation1.value
                                             )
                                           ),
                                           Transform(
-                                            transform: Matrix4.translationValues(0.0, animation3.value*height, 0.0),
+                                            transform: Matrix4.translationValues(0.0, animation3.value*height/4, 0.0),
                                             child: Align(
                                               heightFactor: 0.5,
                                               alignment: Alignment.centerRight,
-                                              child: randomBool == true
-                                              ?
-                                              Text('Sal. 104:33a', 
-                                                style: TextStyle(
-                                                  fontStyle: FontStyle.italic,
-                                                  fontSize: 12,
-                                                  fontFamily: 'Montserrat',
-                                                  color: modeSombre == 1 ? Colors.white : Theme.of(context).primaryColorDark
+                                              child: AnimatedOpacity(
+                                                opacity: animation1.value,
+                                                child: randomBool == true
+                                                ?
+                                                Text('Sal. 104:33a', 
+                                                  style: TextStyle(
+                                                    fontStyle: FontStyle.italic,
+                                                    fontSize: 12,
+                                                    fontFamily: 'Montserrat',
+                                                    color: modeSombre == 1 ? Colors.white : Theme.of(context).primaryColorDark
+                                                  )
                                                 )
+                                                :
+                                                Text('Sal. 105:2a', 
+                                                  style: TextStyle(
+                                                    fontStyle: FontStyle.italic,
+                                                    fontSize: 12,
+                                                    fontFamily: 'Montserrat',
+                                                    color: modeSombre == 1 ? Colors.white : Theme.of(context).primaryColorDark
+                                                  )
+                                                ), duration: Duration(seconds: 1),
                                               )
-                                              :
-                                              Text('Sal. 105:2a', 
-                                                style: TextStyle(
-                                                  fontStyle: FontStyle.italic,
-                                                  fontSize: 12,
-                                                  fontFamily: 'Montserrat',
-                                                  color: modeSombre == 1 ? Colors.white : Theme.of(context).primaryColorDark
-                                                )
-                                              )
+                                              
                                             ),
                                           )
                                         ],
